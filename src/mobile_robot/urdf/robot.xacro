@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<robot name="mobile_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <link name="base_link"/>
+
+  <link name="mobile_base">
+    <inertial>
+      <origin xyz="-8.80e-06 -5.08e-06 0.025" rpy="0 0 0" />
+      <mass value="11.23"/>
+      <inertia ixx="0.031" iyy="0.031" izz="0.059" ixy="0" iyz="0" ixz="0" />
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://mobile_robot/meshes/mobile_base.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0.025" rpy="0 0 0" />
+      <geometry>
+        <cylinder radius="0.13" length="0.05"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="base_link_to_mobile_base" type="fixed">
+    <parent link="base_link"/>
+    <child link="mobile_base"/>
+    <origin xyz="0 0 0.035" rpy="0 0 0"/> 
+  </joint>
+
+  <xacro:macro name="omni_wheel" params="prefix joint_name joint_xyz joint_rpy v_xyz v_rpy mesh_num">
+    <link name="Omni_wheel_single_part_${prefix}">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="1.98" />
+        <inertia ixx="0.0023" iyy="0.0023" izz="0.0041" ixy="0" iyz="0" ixz="0" />
+      </inertial>
+      
+      <visual>
+        <origin xyz="${v_xyz}" rpy="${v_rpy}" />
+        <geometry>
+          <mesh filename="package://mobile_robot/meshes/Omni_wheel_single_part_${mesh_num}.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry><cylinder radius="0.06" length="0.03"/></geometry>
+      </collision>
+    </link>
+
+    <joint name="${joint_name}" type="continuous">
+      <origin xyz="${joint_xyz}" rpy="${joint_rpy}"/>
+      <parent link="mobile_base"/>
+      <child link="Omni_wheel_single_part_${prefix}"/>
+      <axis xyz="0 0 1"/> </joint>
+
+    <gazebo reference="Omni_wheel_single_part_${prefix}">
+      <mu1 value="0.5"/> <mu2 value="0.01"/> 
+      <fdir1 value="1 0 0"/> 
+      <kp value="2000000.0"/>
+      <kd value="1000.0"/>
+      <minDepth value="0.0"/>
+    </gazebo>
+  </xacro:macro>
+
+  <xacro:omni_wheel 
+    prefix="2" 
+    mesh_num="2"
+    joint_name="mobile_base_Revolute-1" 
+    joint_xyz="0.0 0.1766 0.025" 
+    joint_rpy="-1.5708 0 0"
+    v_xyz="2.22e-08 0.018 0.715" 
+    v_rpy="1.5708 -1.5708 0"/>
+  
+  <xacro:omni_wheel 
+    prefix="3" 
+    mesh_num="3"
+    joint_name="mobile_base_Revolute-2" 
+    joint_xyz="0.15294 -0.0883 0.025" 
+    joint_rpy="-1.5708 0 -2.0944"
+    v_xyz="2.55e-08 0.018 0.715" 
+    v_rpy="1.5708 -1.5708 0"/>
+  
+  <xacro:omni_wheel 
+    prefix="1" 
+    mesh_num="1"
+    joint_name="mobile_base_Revolute-3" 
+    joint_xyz="-0.15294 -0.0883 0.025" 
+    joint_rpy="-1.5708 0 2.0944"
+    v_xyz="-2.52e-08 0.018 -0.738" 
+    v_rpy="1.5708 1.5708 0"/>
+
+</robot>
