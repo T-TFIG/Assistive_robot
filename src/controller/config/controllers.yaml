@@ -1,0 +1,21 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100  # Hz
+
+    wheel_pid_controller:
+      type: pid_controller/PidController
+
+wheel_pid_controller:
+  ros__parameters:
+    dof_names:
+      - wheel_1_joint
+      - wheel_2_joint
+      - wheel_3_joint
+    
+    command_interface: velocity
+    reference_and_state_interfaces: ["velocity"]
+
+    gains:
+      wheel_1_joint: {p: 1.5, i: 0.1, d: 0.01, i_clamp_max: 5.0, i_clamp_min: -5.0, antiwindup: true}
+      wheel_2_joint: {p: 1.5, i: 0.1, d: 0.01, i_clamp_max: 5.0, i_clamp_min: -5.0, antiwindup: true}
+      wheel_3_joint: {p: 1.5, i: 0.1, d: 0.01, i_clamp_max: 5.0, i_clamp_min: -5.0, antiwindup: true}

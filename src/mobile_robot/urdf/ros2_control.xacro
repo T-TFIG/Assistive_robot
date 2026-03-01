@@ -4,12 +4,12 @@
   <!-- ros2_control configuration -->
   <ros2_control name="GazeboSystem" type="system">
     <hardware>
-      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+      <plugin>mobile_base_controller/OmnimobileRobothardware</plugin>
     </hardware>
     
     <!-- Joint 1 -->
     <joint name="mobile_base_Revolute-1">
-      <command_interface name="velocity">
+      <command_interface name="effort">
         <param name="min">-10</param>
         <param name="max">10</param>
       </command_interface>
@@ -19,7 +19,7 @@
     
     <!-- Joint 2 -->
     <joint name="mobile_base_Revolute-2">
-      <command_interface name="velocity">
+      <command_interface name="effort">
         <param name="min">-10</param>
         <param name="max">10</param>
       </command_interface>
@@ -29,7 +29,7 @@
     
     <!-- Joint 3 -->
     <joint name="mobile_base_Revolute-3">
-      <command_interface name="velocity">
+      <command_interface name="effort">
         <param name="min">-10</param>
         <param name="max">10</param>
       </command_interface>

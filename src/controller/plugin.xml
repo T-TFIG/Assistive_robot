@@ -1,0 +1,10 @@
+<library path="velocity_pid_control">
+  <class
+    name="pid_controller/VelocityPIDControl"
+    type="pid_controller::VelocityPIDControl"
+    base_class_type="controller_interface::ControllerInterface">
+    <description>
+      Custom velocity PID controller
+    </description>
+  </class>
+</library>

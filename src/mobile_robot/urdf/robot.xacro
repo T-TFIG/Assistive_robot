@@ -59,10 +59,10 @@
       <axis xyz="0 0 1"/> </joint>
 
     <gazebo reference="Omni_wheel_single_part_${prefix}">
-      <mu1 value="0.5"/> <mu2 value="0.01"/> 
+      <mu1 value="3.0"/> <mu2 value="0.2"/> 
       <fdir1 value="1 0 0"/> 
       <kp value="2000000.0"/>
-      <kd value="1000.0"/>
+      <kd value="10000.0"/>
       <minDepth value="0.0"/>
     </gazebo>
   </xacro:macro>

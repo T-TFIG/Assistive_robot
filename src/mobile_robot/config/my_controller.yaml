@@ -6,12 +6,42 @@ controller_manager:
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-    wheel_velocity_controller:
-      type: velocity_controllers/JointGroupVelocityController
-      
-wheel_velocity_controller:
+    wheel1_velocity_controller:
+      type: pid_controller/VelocityPIDControl
+
+    wheel2_velocity_controller:
+      type: pid_controller/VelocityPIDControl
+
+    wheel3_velocity_controller:
+      type: pid_controller/VelocityPIDControl
+
+
+wheel1_velocity_controller:
   ros__parameters:
-    joints:
-      - mobile_base_Revolute-1
-      - mobile_base_Revolute-2
-      - mobile_base_Revolute-3
+    joint: mobile_base_Revolute-1
+    pid:
+      p: 10.0
+      i: 0.1
+      d: 0.01
+      i_clamp_min: -5.0
+      i_clamp_max: 5.0
+
+wheel2_velocity_controller:
+  ros__parameters:
+    joint: mobile_base_Revolute-2
+    pid:
+      p: 10.0
+      i: 0.1
+      d: 0.01
+      i_clamp_min: -5.0
+      i_clamp_max: 5.0
+
+wheel3_velocity_controller:
+  ros__parameters:
+    joint: mobile_base_Revolute-3
+    pid:
+      p: 10.0
+      i: 0.1
+      d: 0.01
+      i_clamp_min: -5.0
+      i_clamp_max: 5.0
