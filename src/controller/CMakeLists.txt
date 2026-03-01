@@ -29,7 +29,7 @@ endforeach()
 # 5. Generate the Parameters Header FIRST
 # This creates the "pid_controller_parameters" target
 generate_parameter_library(pid_controller_parameters
-  config/controllers.yaml
+  src/controllers.yaml
 )
 
 # 6. Create your Controller Library
@@ -55,10 +55,7 @@ target_link_libraries(velocity_pid_controller
 )
 
 # 9. Export the plugin (so ROS 2 can "discover" your controller)
-pluginlib_export_plugin_description_file(
-  controller_interface
-  plugin.xml
-)
+pluginlib_export_plugin_description_file(controller_interface plugin.xml)
 
 # 10. Install instructions
 install(

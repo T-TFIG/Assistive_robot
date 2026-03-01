@@ -8,7 +8,7 @@
 #include "control_toolbox/pid.hpp"
 #include "controller_interface/chainable_controller_interface.hpp"
 #include "geometry_msgs/msg/twist.hpp"
-#include "realtime_tools/realtime_buffer.h"
+#include "realtime_tools/realtime_buffer.hpp"
 
 #include "pid_controller_parameters.hpp"
 
@@ -54,7 +54,12 @@ namespace pid_controller
       double wheel_radius_ = 0.05; // 5cm
       double robot_radius_ = 0.15; // 15cm
 
-      
+      std::vector<hardware_interface::CommandInterface> on_export_reference_interfaces() override;
+
+      // shared pointer 
+      std::shared_ptr<ParamListener> param_listener_;
+      Params params_;
+
   };  
 }
 

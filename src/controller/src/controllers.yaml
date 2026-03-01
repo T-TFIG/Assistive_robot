@@ -1,0 +1,21 @@
+pid_controller:
+  robot_radius: {type: double, default_value: 0.15}
+  wheel_radius: {type: double, default_value: 0.05}
+  num_of_wheels: {type: int, default_value: 3}
+  wheel_1:
+    kp: {type: double, default_value: 1.0}
+    ki: {type: double, default_value: 0.0}
+    kd: {type: double, default_value: 0.0}
+  wheel_2:
+    kp: {type: double, default_value: 1.0}
+    ki: {type: double, default_value: 0.0}
+    kd: {type: double, default_value: 0.0}
+  wheel_3:
+    kp: {type: double, default_value: 1.0}
+    ki: {type: double, default_value: 0.0}
+    kd: {type: double, default_value: 0.0}
+
+  i_min: {type: double, default_value: -3.0}
+  i_max: {type: double, default_value: 3.0}
+
+  

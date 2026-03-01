@@ -51,7 +51,8 @@ def generate_launch_description():
     omni_drive = Node(
         package="controller_manager",
         executable='spawner',
-        arguments=["wheel_velocity_controller"]
+        arguments=["omni_base_controller"],
+        output="screen",
     )
 
     joint_board_spawner = Node(
@@ -66,10 +67,6 @@ def generate_launch_description():
         name='rviz2',
         output='screen'
     )
-
-
-
-
 
     return LaunchDescription([
         set_gazebo_model_path,
