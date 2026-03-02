@@ -34,7 +34,10 @@ def generate_launch_description():
                 'launch',
                 'gazebo.launch.py'
             )
-        )
+        ),
+        launch_arguments={
+            'extra_gazebo_args': '--ros-args --params-file ' + controller_yaml
+        }.items()
     )
 
     spawn_robot = Node(
@@ -42,8 +45,7 @@ def generate_launch_description():
         executable='spawn_entity.py',
         arguments=[
             '-entity', 'my_robot',
-            '-topic', 'robot_description',
-            '-z', '1'
+            '-topic', 'robot_description'
         ],
         output='screen'
     )
@@ -51,7 +53,7 @@ def generate_launch_description():
     omni_drive = Node(
         package="controller_manager",
         executable='spawner',
-        arguments=["omni_base_controller", "--param-file", controller_yaml],
+        arguments=["omni_base_controller"],
         parameters=[{'use_sim_time': True}],
         output="screen",
     )

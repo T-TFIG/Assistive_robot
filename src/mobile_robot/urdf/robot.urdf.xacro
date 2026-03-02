@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="mobile_robot">
-  
+
+  <!-- parameter define  -->
+  <xacro:arg name="controller_yaml" default=""/>
+
+  <!-- shitty file for our robot -->
   <xacro:include filename="robot.xacro"/>
   
   <xacro:include filename="ros2_control.xacro"/>

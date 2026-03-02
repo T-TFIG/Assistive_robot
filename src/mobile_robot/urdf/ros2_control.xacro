@@ -41,7 +41,7 @@
   <!-- Gazebo ros2_control plugin -->
   <gazebo>
     <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
-      <parameters>$(find mobile_robot)/config/my_controller.yaml</parameters>
+      <parameters>$(arg controller_yaml)</parameters>
     </plugin>
   </gazebo>
 

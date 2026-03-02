@@ -7,9 +7,10 @@ PidController::PidController() : controller_interface::ControllerInterface() {}
 controller_interface::CallbackReturn PidController::on_init()
 {
     try {
-        param_listener_ = std::make_shared<pid_controller::ParamListener>(get_node(), ""); 
+        param_listener_ = std::make_shared<pid_controller::ParamListener>(get_node()); 
         params_ = param_listener_->get_params();
         RCLCPP_INFO(get_node()->get_logger(), "Number of joints found: %zu", params_.dof_names.size());
+        RCLCPP_INFO(get_node()->get_logger(), "Number of joints found: %f", params_.wheel_1.kp);
         
     } catch (const std::exception & e) {
         RCLCPP_ERROR(get_node()->get_logger(), "Exception during parameter init: %s", e.what());
@@ -76,6 +77,11 @@ controller_interface::return_type PidController::update(const rclcpp::Time & /*t
     if (!command || !(*command)) return controller_interface::return_type::OK;
 
     std::vector<double> command_joint = inverse_kinematic(*command);
+    
+    double dt = period.nanoseconds();
+
+    if (dt <= 0.0)
+        return controller_interface::return_type::OK;
 
     for (int i = 0; i < 3; i++)
     {
@@ -83,7 +89,9 @@ controller_interface::return_type PidController::update(const rclcpp::Time & /*t
         double error = command_joint[i] - current_vel;
         
         // prevent NaN explosion
-        double output = pids_[i]->computeCommand(error, period.seconds());
+        double output = pids_[i]->computeCommand(error, dt);
+        
+        RCLCPP_INFO(get_node()->get_logger(), "command_of_motor: %d = %f", i, error);
 
         // Safety Clamps
         if (output > 5.0) output = 5.0;
@@ -91,6 +99,7 @@ controller_interface::return_type PidController::update(const rclcpp::Time & /*t
         if (std::isnan(output)) output = 0.0;
 
         command_interfaces_[i].set_value(output);
+        
     }
     return controller_interface::return_type::OK;
 }
