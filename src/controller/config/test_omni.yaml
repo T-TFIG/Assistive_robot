@@ -1,0 +1,16 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100
+    omni_controller:
+      type: pid_controller/PidController
+
+omni_controller:
+  ros__parameters:
+    robot_radius: 0.15
+    wheel_radius: 0.05
+    num_of_wheels: 3
+    i_min: -5.0
+    i_max: 5.0
+    wheel_1: {kp: 1.0, ki: 0.0, kd: 0.0}
+    wheel_2: {kp: 1.0, ki: 0.0, kd: 0.0}
+    wheel_3: {kp: 1.0, ki: 0.0, kd: 0.0}

@@ -51,7 +51,8 @@ def generate_launch_description():
     omni_drive = Node(
         package="controller_manager",
         executable='spawner',
-        arguments=["omni_base_controller"],
+        arguments=["omni_base_controller", "--param-file", controller_yaml],
+        parameters=[{'use_sim_time': True}],
         output="screen",
     )
 

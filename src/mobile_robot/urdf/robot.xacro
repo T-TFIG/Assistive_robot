@@ -6,7 +6,7 @@
   <link name="mobile_base">
     <inertial>
       <origin xyz="-8.80e-06 -5.08e-06 0.025" rpy="0 0 0" />
-      <mass value="11.23"/>
+      <mass value="3.0"/>
       <inertia ixx="0.031" iyy="0.031" izz="0.059" ixy="0" iyz="0" ixz="0" />
     </inertial>
 
@@ -35,7 +35,7 @@
     <link name="Omni_wheel_single_part_${prefix}">
       <inertial>
         <origin xyz="0 0 0" rpy="0 0 0" />
-        <mass value="1.98" />
+        <mass value="0.3" />
         <inertia ixx="0.0023" iyy="0.0023" izz="0.0041" ixy="0" iyz="0" ixz="0" />
       </inertial>
       
@@ -70,7 +70,7 @@
   <xacro:omni_wheel 
     prefix="2" 
     mesh_num="2"
-    joint_name="mobile_base_Revolute-1" 
+    joint_name="mobile_base_Revolute_1" 
     joint_xyz="0.0 0.1766 0.025" 
     joint_rpy="-1.5708 0 0"
     v_xyz="2.22e-08 0.018 0.715" 
@@ -79,7 +79,7 @@
   <xacro:omni_wheel 
     prefix="3" 
     mesh_num="3"
-    joint_name="mobile_base_Revolute-2" 
+    joint_name="mobile_base_Revolute_2" 
     joint_xyz="0.15294 -0.0883 0.025" 
     joint_rpy="-1.5708 0 -2.0944"
     v_xyz="2.55e-08 0.018 0.715" 
@@ -88,7 +88,7 @@
   <xacro:omni_wheel 
     prefix="1" 
     mesh_num="1"
-    joint_name="mobile_base_Revolute-3" 
+    joint_name="mobile_base_Revolute_3" 
     joint_xyz="-0.15294 -0.0883 0.025" 
     joint_rpy="-1.5708 0 2.0944"
     v_xyz="-2.52e-08 0.018 -0.738" 

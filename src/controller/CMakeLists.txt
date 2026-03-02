@@ -15,6 +15,7 @@ set(PACKAGE_DEPENDENCIES
   control_msgs
   control_toolbox
   controller_interface
+  geometry_msgs
   realtime_tools
   ament_cmake
   rclcpp
@@ -56,10 +57,8 @@ target_link_libraries(velocity_pid_controller
 
 # 9. Export the plugin (so ROS 2 can "discover" your controller)
 pluginlib_export_plugin_description_file(controller_interface plugin.xml)
-
-# 10. Install instructions
 install(
-  TARGETS velocity_pid_controller
+  TARGETS velocity_pid_controller pid_controller_parameters
   DESTINATION lib
 )
 
@@ -67,5 +66,13 @@ install(
   DIRECTORY include/
   DESTINATION include
 )
+
+install(
+  FILES plugin.xml
+  DESTINATION share/${PROJECT_NAME}
+)
+
+ament_export_libraries(velocity_pid_controller)
+ament_export_dependencies(${PACKAGE_DEPENDENCIES})
 
 ament_package()
