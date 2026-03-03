@@ -22,14 +22,14 @@ omni_base_controller:
     i_min: -5.0
     i_max: 5.0
     wheel_1:
-      kp: 0.1
+      kp: 0.3
       ki: 0.1
-      kd: 0.01
+      kd: 0.0
     wheel_2:
-      kp: 0.1
+      kp: 0.3
       ki: 0.1
-      kd: 0.01
+      kd: 0.0
     wheel_3:
-      kp: 0.1
+      kp: 0.3
       ki: 0.1
-      kd: 0.01
+      kd: 0.0

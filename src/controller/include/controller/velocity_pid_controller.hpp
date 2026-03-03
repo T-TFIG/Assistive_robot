@@ -25,11 +25,26 @@ namespace omni_pid_controller
     controller_interface::return_type update(const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
   protected:
+    struct SimplePID
+    {
+      double kp;
+      double ki;
+      double kd;
+
+      double integral = 0.0;
+      double prev_error = 0.0;
+
+      double i_max;
+      double i_min;
+    };
+
     std::vector<double> inverse_kinematic(std::shared_ptr<geometry_msgs::msg::Twist> command);
 
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr rt_command_sub_;
     realtime_tools::RealtimeBuffer<std::shared_ptr<geometry_msgs::msg::Twist>> rt_command_ptr_;
-    std::vector<std::unique_ptr<control_toolbox::Pid>> pids_;
+    std::vector<SimplePID> pids_;
+
+    double compute_pid_command(double& error, double& dt, int motor_num);
 
     std::shared_ptr<pid_controller::ParamListener> param_listener_;  // add namespace from shitty controller.yaml
     pid_controller::Params params_;                                   // add namespace
