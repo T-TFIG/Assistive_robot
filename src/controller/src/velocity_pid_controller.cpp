@@ -1,5 +1,5 @@
-// #include "controller/velocity_pid_controller.hpp"
-#include "/home/nathaphong_meng/Documents/mater_degree_Bristol/Assistive_robot/src/controller/include/controller/velocity_pid_controller.hpp"
+#include "controller/velocity_pid_controller.hpp"
+// #include "/home/nathaphong_meng/Documents/mater_degree_Bristol/Assistive_robot/src/controller/include/controller/velocity_pid_controller.hpp"
 
 
 namespace omni_pid_controller
@@ -31,8 +31,11 @@ controller_interface::CallbackReturn PidController::on_configure(const rclcpp_li
 {
     auto callback = [this](const std::shared_ptr<geometry_msgs::msg::Twist> msg){rt_command_ptr_.writeFromNonRT(msg);};
     rt_command_sub_ = get_node()->create_subscription<geometry_msgs::msg::Twist>("~/cmd_vel", rclcpp::SystemDefaultsQoS(), callback);
+    non_rt_command_pub_ = get_node()->create_publisher<std_msgs::msg::Float32MultiArray>("~/pose", rclcpp::SystemDefaultsQoS());
+    timer_ = get_node()->create_wall_timer(std::chrono::milliseconds(10), std::bind(&PidController::timer_callback, this));
     return CallbackReturn::SUCCESS;
 }
+
 
 controller_interface::CallbackReturn PidController::on_activate(const rclcpp_lifecycle::State & /*previous_state*/)
 {
@@ -55,6 +58,29 @@ controller_interface::InterfaceConfiguration PidController::state_interface_conf
     return config;
 }
 
+Eigen::Matrix<double, 3 ,1> PidController::forward_kinematic()
+{
+    const double r = params_.wheel_radius;
+    const double R = params_.robot_radius;
+
+    double q1 = 0.0 * M_PI / 180.0;
+    double q2 = 120.0 * M_PI / 180.0;
+    double q3 = 240.0 * M_PI / 180.0;
+
+    Eigen::Matrix<double, 3, 3> M;
+    Eigen::Matrix<double, 3, 1> omega;
+
+    M << -sin(q1), -sin(q2), -sin(q3),
+          cos(q1),  cos(q2),  cos(q3),
+          1.0/R,    1.0/R,    1.0/R;
+
+    omega << state_interfaces_[0].get_value(),
+             state_interfaces_[1].get_value(),
+             state_interfaces_[2].get_value();
+
+    return (r / 3.0) * M * omega;
+}
+
 std::vector<double> PidController::inverse_kinematic(std::shared_ptr<geometry_msgs::msg::Twist> command)
 {   
     double vx = command->linear.x;
@@ -67,6 +93,21 @@ std::vector<double> PidController::inverse_kinematic(std::shared_ptr<geometry_ms
     command_joint[2] = (vx + params_.robot_radius * omega) / params_.wheel_radius;
 
     return command_joint;
+}
+
+void PidController::timer_callback()
+{
+    auto twist_ptr = rt_twist_buffer_.readFromNonRT();
+    if(!twist_ptr) {return;}
+
+    auto message = std_msgs::msg::Float32MultiArray();
+    message.data.resize(3);
+
+    message.data[0] = static_cast<float>((*twist_ptr)(0));
+    message.data[1] = static_cast<float>((*twist_ptr)(1));
+    message.data[2] = static_cast<float>((*twist_ptr)(2));
+
+    non_rt_command_pub_->publish(message);
 }
 
 double PidController::compute_pid_command(double& error, double& dt, int motor_num)
@@ -91,8 +132,8 @@ double PidController::compute_pid_command(double& error, double& dt, int motor_n
 controller_interface::return_type PidController::update(const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {
     auto command = rt_command_ptr_.readFromRT();
-    if (!command || !(*command)) return controller_interface::return_type::OK;
 
+    if (!command || !(*command)) return controller_interface::return_type::OK;
     std::vector<double> command_joint = inverse_kinematic(*command);
     
     double dt = period.seconds();
@@ -107,8 +148,7 @@ controller_interface::return_type PidController::update(const rclcpp::Time & /*t
         
         // prevent NaN explosion
         double output = compute_pid_command(error, dt, i);
-        
-        RCLCPP_INFO(get_node()->get_logger(), "Inverse kinematic: %d = %f", i, output);
+        RCLCPP_INFO(get_node()->get_logger(), "Error happen: %d = %f", i, error);
 
         // Safety Clamps
         if (output > 5.0) output = 5.0;
@@ -117,6 +157,10 @@ controller_interface::return_type PidController::update(const rclcpp::Time & /*t
 
         command_interfaces_[i].set_value(output);
     }
+
+    auto twist = PidController::forward_kinematic();
+    rt_twist_buffer_.writeFromNonRT(twist);
+
     return controller_interface::return_type::OK;
 }
 

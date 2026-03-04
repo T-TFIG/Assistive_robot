@@ -4,10 +4,13 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <math.h>
+#include <Eigen/Dense>
 
 #include "control_toolbox/pid.hpp"
 #include "controller_interface/controller_interface.hpp"
 #include "geometry_msgs/msg/twist.hpp"
+#include "std_msgs/msg/float32_multi_array.hpp"
 #include "realtime_tools/realtime_buffer.hpp"
 #include <controller/pid_controller_parameters.hpp>  // fix deprecated include
 
@@ -39,15 +42,20 @@ namespace omni_pid_controller
     };
 
     std::vector<double> inverse_kinematic(std::shared_ptr<geometry_msgs::msg::Twist> command);
+    Eigen::Matrix<double, 3, 1> forward_kinematic();
 
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr rt_command_sub_;
+    rclcpp::Publisher<std_msgs::msg::Float32MultiArray>::SharedPtr non_rt_command_pub_;
     realtime_tools::RealtimeBuffer<std::shared_ptr<geometry_msgs::msg::Twist>> rt_command_ptr_;
+    realtime_tools::RealtimeBuffer<Eigen::Matrix<double,3,1>> rt_twist_buffer_;
     std::vector<SimplePID> pids_;
 
     double compute_pid_command(double& error, double& dt, int motor_num);
+    void timer_callback();
 
     std::shared_ptr<pid_controller::ParamListener> param_listener_;  // add namespace from shitty controller.yaml
-    pid_controller::Params params_;                                   // add namespace
+    pid_controller::Params params_;                                  // add namespace
+    rclcpp::TimerBase::SharedPtr timer_;
   };
 }
 #endif
