@@ -10,12 +10,30 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(generate_parameter_library REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
-add_executable(inv_kinematic src/inverse_kinematic.cpp)
-ament_target_dependencies(inv_kinematic rclcpp std_msgs geometry_msgs)
+generate_parameter_library(teleop_twist_parameters
+  config/teleop_keyboard.yaml
+)
+
+add_executable(teleop src/teleop_twist_keyboard.cpp)
+
+ament_target_dependencies(
+  teleop 
+  rclcpp 
+  std_msgs 
+  geometry_msgs
+)
+
+target_link_libraries(teleop teleop_twist_parameters)
+
+install(TARGETS
+  teleop
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 install(
   DIRECTORY
@@ -26,10 +44,6 @@ install(
   DESTINATION share/${PROJECT_NAME}
 )
 
-install(TARGETS
-  inv_kinematic
-  DESTINATION lib/${PROJECT_NAME}
-)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
