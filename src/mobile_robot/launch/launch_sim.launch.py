@@ -1,73 +1,85 @@
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, RegisterEventHandler, SetEnvironmentVariable
+from launch.actions import IncludeLaunchDescription, SetEnvironmentVariable, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.event_handlers import OnProcessExit
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
-from launch.substitutions import Command
 import os
 
-
 def generate_launch_description():
-
     package_name = 'mobile_robot'
     pkg_path = get_package_share_directory(package_name)
     controller_yaml = os.path.join(pkg_path, "config", 'my_controller.yaml')
-    install_dir = os.path.abspath(os.path.join(pkg_path, '..'))
     
-    # really really important we tell the gazebo where is the model stl path is or else it will continue giving an error
+    # 1. Setup Model Paths
+    install_dir = os.path.abspath(os.path.join(pkg_path, '..'))
+
     set_gazebo_model_path = SetEnvironmentVariable(
         name='GAZEBO_MODEL_PATH',
         value=[install_dir]
     )
 
-    rsp = IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([os.path.join(
-                    get_package_share_directory(package_name),'launch','rsp.launch.py'
-                )]), launch_arguments={'use_sim_time': 'true'}.items()
+    # 2. Path to the House World
+    world_path = os.path.join(
+        get_package_share_directory('turtlebot3_gazebo'),
+        'worlds',
+        'turtlebot3_house.world'
     )
 
+    # 3. Robot State Publisher
+    rsp = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([os.path.join(pkg_path, 'launch', 'rsp.launch.py')]),
+        launch_arguments={'use_sim_time': 'true'}.items()
+    )
+
+    # 4. Gazebo (passing the controller params here)
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(
-                get_package_share_directory('gazebo_ros'),
-                'launch',
-                'gazebo.launch.py'
-            )
+            os.path.join(get_package_share_directory('gazebo_ros'), 'launch', 'gazebo.launch.py')
         ),
         launch_arguments={
+            'world': world_path,
             'extra_gazebo_args': '--ros-args --params-file ' + controller_yaml
         }.items()
     )
 
-    spawn_robot = Node(
-        package='gazebo_ros',
-        executable='spawn_entity.py',
-        arguments=[
-            '-entity', 'my_robot',
-            '-topic', 'robot_description'
-        ],
-        output='screen'
+    # 5. Delayed Spawn Robot (Wait 5 seconds for world to load)
+    spawn_robot = TimerAction(
+        period=5.0,
+        actions=[
+            Node(
+                package='gazebo_ros',
+                executable='spawn_entity.py',
+                arguments=[
+                    '-entity', 'my_robot', 
+                    '-topic', 'robot_description',
+                    '-x', '0.0', '-y', '0.1', '-z', '0.1'
+                ],
+                output='screen'
+            )
+        ]
     )
 
+    # 6. Controller Spawners
     omni_drive = Node(
         package="controller_manager",
         executable='spawner',
         arguments=["omni_base_controller"],
-        parameters=[{'use_sim_time': True}],
         output="screen",
     )
 
-    joint_board_spawner = Node(
+    joint_state_broadcaster = Node(
         package="controller_manager",
         executable='spawner',
-        arguments=["joint_state_broadcaster"]
+        arguments=["joint_state_broadcaster"],
+        output="screen",
     )
 
+    # 7. RViz2
     rviz = Node(
         package='rviz2',
         executable='rviz2',
         name='rviz2',
+        parameters=[{'use_sim_time': True}],
         output='screen'
     )
 
@@ -77,6 +89,6 @@ def generate_launch_description():
         rsp,
         spawn_robot,
         omni_drive,
-        joint_board_spawner,
+        joint_state_broadcaster,
         rviz
     ])
