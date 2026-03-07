@@ -14,6 +14,9 @@ set(PACKAGE_DEPENDENCIES
   generate_parameter_library
   control_msgs
   control_toolbox
+  nav_msgs
+  tf2
+  tf2_geometry_msgs
   controller_interface
   geometry_msgs
   realtime_tools

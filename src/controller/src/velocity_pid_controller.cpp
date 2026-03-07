@@ -32,7 +32,10 @@ controller_interface::CallbackReturn PidController::on_configure(const rclcpp_li
     auto callback = [this](const std::shared_ptr<geometry_msgs::msg::Twist> msg){rt_command_ptr_.writeFromNonRT(msg);};
     rt_command_sub_ = get_node()->create_subscription<geometry_msgs::msg::Twist>("~/cmd_vel", rclcpp::SystemDefaultsQoS(), callback);
     non_rt_command_pub_ = get_node()->create_publisher<std_msgs::msg::Float32MultiArray>("~/pose", rclcpp::SystemDefaultsQoS());
+    non_rt_odom_pub_ = get_node()->create_publisher<nav_msgs::msg::Odometry>("/odom", rclcpp::SystemDefaultsQoS());
     timer_ = get_node()->create_wall_timer(std::chrono::milliseconds(10), std::bind(&PidController::timer_callback, this));
+    tf_boardcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(get_node());
+    pseudo_odom_ = {0, 0, 0, 0, 0};
     return CallbackReturn::SUCCESS;
 }
 
@@ -95,9 +98,22 @@ std::vector<double> PidController::inverse_kinematic(std::shared_ptr<geometry_ms
     return command_joint;
 }
 
+void PidController::Odometry(auto vel, double* dt)
+{
+    pseudo_odom_[0] = pseudo_odom_[0] + vel(0)*(*dt);       // position x
+    pseudo_odom_[1] = pseudo_odom_[1] + vel(1)*(*dt);       // position y
+    pseudo_odom_[2] = pseudo_odom_[2] + vel(2)*(*dt);       // angular yaw
+
+    pseudo_odom_[3] = vel(0);       // linear velocity x
+    pseudo_odom_[4] = vel(2);       // angular velocity yaw
+}
+
 void PidController::timer_callback()
 {
+    // debugging thing
     auto twist_ptr = rt_twist_buffer_.readFromNonRT();
+
+    // odom message
     if(!twist_ptr) {return;}
 
     auto message = std_msgs::msg::Float32MultiArray();
@@ -107,7 +123,46 @@ void PidController::timer_callback()
     message.data[1] = static_cast<float>((*twist_ptr)(1));
     message.data[2] = static_cast<float>((*twist_ptr)(2));
 
+    // compute quaternion
+    q.setRPY(0, 0, pseudo_odom_[2]);
+    geometry_msgs::msg::Quaternion q_msg = tf2::toMsg(q);
+
+
+    // Odom message 
+    auto odom_message = nav_msgs::msg::Odometry();
+
+    odom_message.header.stamp = this->now();
+    odom_message.header.frame_id = params_.header_frame;
+    odom_message.child_frame_id = params_.child_frame;
+
+    odom_message.pose.pose.position.x = pseudo_odom_[0];
+    odom_message.pose.pose.position.y = pseudo_odom_[1];
+    odom_message.pose.pose.position.z = 0.0;
+
+    odom_message.pose.pose.orientation = q_msg;
+
+    odom_message.twist.twist.linear.x = pseudo_odom_[3];
+    odom_message.twist.twist.angular.z = pseudo_odom_[4];
+
+    // tf2 publish
+    geometry_msgs::msg::TransformStamped tf;
+
+    tf.header.stamp = this->now();
+    tf.header.frame_id = params_.header_frame;
+    tf.child_frame_id = params_.child_frame;
+
+    tf.transform.translation.x = pseudo_odom_[0];
+    tf.transform.translation.y = pseudo_odom_[1];
+    tf.transform.translation.z = 0.0;
+
+    tf.transform.rotation = q_msg;
+
+
+    // publish shit
     non_rt_command_pub_->publish(message);
+    non_rt_odom_pub_->publish(odom_message);
+    tf_boardcaster_->sendTransform(tf);
+
 }
 
 double PidController::compute_pid_command(double& error, double& dt, int motor_num)
@@ -148,8 +203,6 @@ controller_interface::return_type PidController::update(const rclcpp::Time & /*t
         
         // prevent NaN explosion
         double output = compute_pid_command(error, dt, i);
-        RCLCPP_INFO(get_node()->get_logger(), "Error happen: %d = %f", i, error);
-
         // Safety Clamps
         if (output > 5.0) output = 5.0;
         if (output < -5.0) output = -5.0;
@@ -159,8 +212,8 @@ controller_interface::return_type PidController::update(const rclcpp::Time & /*t
     }
 
     auto twist = PidController::forward_kinematic();
+    PidController::Odometry(twist, &dt);
     rt_twist_buffer_.writeFromNonRT(twist);
-
     return controller_interface::return_type::OK;
 }
 

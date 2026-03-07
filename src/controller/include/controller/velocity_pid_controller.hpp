@@ -10,6 +10,13 @@
 #include "control_toolbox/pid.hpp"
 #include "controller_interface/controller_interface.hpp"
 #include "geometry_msgs/msg/twist.hpp"
+#include "geometry_msgs/msg/quaternion.hpp"
+#include "nav_msgs/msg/odometry.hpp"
+#include "tf2/LinearMath/Quaternion.h"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
+#include "tf2_ros/transform_broadcaster.h"
+#include "geometry_msgs/msg/transform_stamped.hpp"
+#include "geometry_msgs/msg/quaternion.hpp"
 #include "std_msgs/msg/float32_multi_array.hpp"
 #include "realtime_tools/realtime_buffer.hpp"
 #include <controller/pid_controller_parameters.hpp>  // fix deprecated include
@@ -42,10 +49,12 @@ namespace omni_pid_controller
     };
 
     std::vector<double> inverse_kinematic(std::shared_ptr<geometry_msgs::msg::Twist> command);
+    void Odometry(auto vel, double* dt);
     Eigen::Matrix<double, 3, 1> forward_kinematic();
 
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr rt_command_sub_;
     rclcpp::Publisher<std_msgs::msg::Float32MultiArray>::SharedPtr non_rt_command_pub_;
+    rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr non_rt_odom_pub_;
     realtime_tools::RealtimeBuffer<std::shared_ptr<geometry_msgs::msg::Twist>> rt_command_ptr_;
     realtime_tools::RealtimeBuffer<Eigen::Matrix<double,3,1>> rt_twist_buffer_;
     std::vector<SimplePID> pids_;
@@ -56,6 +65,12 @@ namespace omni_pid_controller
     std::shared_ptr<pid_controller::ParamListener> param_listener_;  // add namespace from shitty controller.yaml
     pid_controller::Params params_;                                  // add namespace
     rclcpp::TimerBase::SharedPtr timer_;
+    std::vector<double> pseudo_odom_;   // i am only keep the value of x y and yaw inside this vector
+    tf2::Quaternion q;
+    rclcpp::Clock clock;
+    std::unique_ptr<tf2_ros::TransformBroadcaster> tf_boardcaster_;
+
+
   };
 }
 #endif

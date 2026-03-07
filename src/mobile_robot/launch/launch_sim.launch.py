@@ -83,6 +83,22 @@ def generate_launch_description():
         output='screen'
     )
 
+    slam_toolbox = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory('slam_toolbox'),
+                'launch',
+                'online_async_launch.py'
+            )
+        ),
+        launch_arguments={
+            'use_sim_time': 'true',
+            'odom_frame': 'odom',
+            'base_frame': 'base_link',
+            'scan_topic': '/scan'
+        }.items()
+    )
+
     return LaunchDescription([
         set_gazebo_model_path,
         gazebo,
@@ -90,5 +106,6 @@ def generate_launch_description():
         spawn_robot,
         omni_drive,
         joint_state_broadcaster,
+        slam_toolbox,
         rviz
     ])
