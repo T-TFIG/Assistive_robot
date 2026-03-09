@@ -23,6 +23,7 @@ def generate_launch_description():
         get_package_share_directory('turtlebot3_gazebo'),
         'worlds',
         'turtlebot3_house.world'
+
     )
 
     # 3. Robot State Publisher
@@ -38,6 +39,7 @@ def generate_launch_description():
         ),
         launch_arguments={
             'world': world_path,
+            'use_sim_time': 'true',
             'extra_gazebo_args': '--ros-args --params-file ' + controller_yaml
         }.items()
     )
@@ -52,7 +54,8 @@ def generate_launch_description():
                 arguments=[
                     '-entity', 'my_robot', 
                     '-topic', 'robot_description',
-                    '-x', '0.0', '-y', '0.1', '-z', '0.1'
+                    '-x', '0.0', '-y', '0.0', '-z', '0.0',
+                    '-Y', '1.57' # 45 degrees in radians
                 ],
                 output='screen'
             )
@@ -83,29 +86,46 @@ def generate_launch_description():
         output='screen'
     )
 
-    slam_toolbox = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(
-                get_package_share_directory('slam_toolbox'),
-                'launch',
-                'online_async_launch.py'
-            )
-        ),
-        launch_arguments={
-            'use_sim_time': 'true',
-            'odom_frame': 'odom',
-            'base_frame': 'base_link',
-            'scan_topic': '/scan'
-        }.items()
+    slam_toolbox = Node(
+        package='slam_toolbox',
+        executable='async_slam_toolbox_node',
+        name='slam_toolbox',
+        output='screen',
+        parameters=[
+            {
+                'use_sim_time': True,
+                'odom_frame': 'odom',
+                'base_frame': 'base_link',
+                'scan_topic': '/scan',
+                'mode': 'mapping',
+                'transform_timeout': 0.1,
+                'map_update_interval': 5.0,
+                'resolution': 0.05,
+                'max_laser_range': 20.0,
+                'minimum_time_interval': 0.5,
+                'transform_publish_period': 0.02, # 50Hz
+            }
+        ]
     )
+
+    delayed_joint_broadcaster = TimerAction(
+        period=8.0, # Wait until after the robot is spawned (5s + 3s buffer)
+        actions=[joint_state_broadcaster]
+    )
+
+    delayed_omni_drive = TimerAction(
+        period=10.0, # Wait until broadcaster is up
+        actions=[omni_drive]
+    )
+
 
     return LaunchDescription([
         set_gazebo_model_path,
         gazebo,
         rsp,
         spawn_robot,
-        omni_drive,
-        joint_state_broadcaster,
+        delayed_joint_broadcaster,
+        delayed_omni_drive,
         slam_toolbox,
         rviz
     ])

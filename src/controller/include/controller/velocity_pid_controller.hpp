@@ -48,27 +48,39 @@ namespace omni_pid_controller
       double i_min;
     };
 
-    std::vector<double> inverse_kinematic(std::shared_ptr<geometry_msgs::msg::Twist> command);
-    void Odometry(auto vel, double* dt);
+    std::vector<double> inverse_kinematic(const geometry_msgs::msg::Twist &command);
+    void Odometry(auto vel, double dt);
     Eigen::Matrix<double, 3, 1> forward_kinematic();
 
+    // declared ros2 message parameters (sub and pub) and its tf boardcast
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr rt_command_sub_;
-    rclcpp::Publisher<std_msgs::msg::Float32MultiArray>::SharedPtr non_rt_command_pub_;
-    rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr non_rt_odom_pub_;
+    rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr odom_pub_;
+    std::unique_ptr<tf2_ros::TransformBroadcaster> tf_boardcaster_;
+
+    // Timer for publishing
+    void timer_callback();
+    rclcpp::TimerBase::SharedPtr timer_;
+
+    // lovely realtime tools (my toxic relationship => function with benefit)
     realtime_tools::RealtimeBuffer<std::shared_ptr<geometry_msgs::msg::Twist>> rt_command_ptr_;
     realtime_tools::RealtimeBuffer<Eigen::Matrix<double,3,1>> rt_twist_buffer_;
+    realtime_tools::RealtimeBuffer<nav_msgs::msg::Odometry> rt_odom_buffer_;
+    realtime_tools::RealtimeBuffer<geometry_msgs::msg::TransformStamped> rt_tf_boardcast_buffer_;
+
+    // dedicated controller (PID) (once i used to make it from controller_toolbox)
     std::vector<SimplePID> pids_;
-
     double compute_pid_command(double& error, double& dt, int motor_num);
-    void timer_callback();
-
+    
+    // yaml pulling variable for more easier to adjust parameter
     std::shared_ptr<pid_controller::ParamListener> param_listener_;  // add namespace from shitty controller.yaml
     pid_controller::Params params_;                                  // add namespace
-    rclcpp::TimerBase::SharedPtr timer_;
-    std::vector<double> pseudo_odom_;   // i am only keep the value of x y and yaw inside this vector
+    
+    
+    // odometry message 
+    nav_msgs::msg::Odometry odom_message;
+    geometry_msgs::msg::TransformStamped tf;
     tf2::Quaternion q;
-    rclcpp::Clock clock;
-    std::unique_ptr<tf2_ros::TransformBroadcaster> tf_boardcaster_;
+    std::vector<double> pseudo_odom_;   // i am only keep the value of x y and yaw inside this vector
 
 
   };

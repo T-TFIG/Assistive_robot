@@ -43,8 +43,13 @@
 
   <!-- Gazebo ros2_control plugin -->
   <gazebo>
-    <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
-      <parameters>$(arg controller_yaml)</parameters>
+    <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+      <parameters>$(find mobile_robot)/config/my_controller.yaml</parameters>
+      <ros>
+          <parameter name="use_sim_time" value="true" type="bool"/>
+      </ros>
+      <publish_odom_tf>false</publish_odom_tf>
+      <publish_wheel_tf>false</publish_wheel_tf>
     </plugin>
   </gazebo>
 

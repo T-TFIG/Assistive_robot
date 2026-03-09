@@ -53,7 +53,7 @@
         <sensor name="laser" type="ray">
             <pose> 0 0 0 0 0 0 </pose>
             <visualize>true</visualize>
-            <update_rate>10</update_rate>
+            <update_rate>100</update_rate>
             <ray>
                 <scan>
                     <horizontal>
@@ -74,7 +74,9 @@
             </ray>
             <plugin name="laser_controller" filename="libgazebo_ros_ray_sensor.so">
                 <ros>
+                    <namespace>/</namespace> 
                     <remapping>~/out:=scan</remapping>
+                    <parameter name="use_sim_time" value="true" type="bool"/>
                 </ros>
                 <output_type>sensor_msgs/LaserScan</output_type>
                 <frame_name>top</frame_name>
