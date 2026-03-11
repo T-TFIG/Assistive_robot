@@ -82,6 +82,9 @@ namespace omni_pid_controller
     tf2::Quaternion q;
     std::vector<double> pseudo_odom_;   // i am only keep the value of x y and yaw inside this vector
 
+    //debugging
+    double debugging;
+
 
   };
 }

@@ -1,5 +1,5 @@
-#include "controller/velocity_pid_controller.hpp"
-// #include "/home/nathaphong_meng/Documents/mater_degree_Bristol/Assistive_robot/src/controller/include/controller/velocity_pid_controller.hpp"
+// #include "controller/velocity_pid_controller.hpp"
+#include "/home/nathaphong_meng/Documents/mater_degree_Bristol/Assistive_robot/src/controller/include/controller/velocity_pid_controller.hpp"
 
 
 namespace omni_pid_controller
@@ -37,6 +37,7 @@ controller_interface::CallbackReturn PidController::on_configure(const rclcpp_li
     // timer_ = get_node()->create_timer(std::chrono::milliseconds(10), std::bind(&PidController::timer_callback, this));
     tf_boardcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(*get_node());
     pseudo_odom_.resize(5, 0.0);
+    debugging = 0.0;
     return CallbackReturn::SUCCESS;
 }
 
@@ -67,22 +68,26 @@ Eigen::Matrix<double, 3 ,1> PidController::forward_kinematic()
     const double r = params_.wheel_radius;
     const double R = params_.robot_radius;
 
-    double q1 = 0.0 * M_PI / 180.0;
-    double q2 = 120.0 * M_PI / 180.0;
-    double q3 = 240.0 * M_PI / 180.0;
-
+    // The projection of wheel velocities onto Robot X, Y, and Theta
     Eigen::Matrix<double, 3, 3> M;
+    M <<  cos(0.0),   cos(2*M_PI/3),   cos(4*M_PI/3), // Projections on X
+         -sin(0.0),  -sin(2*M_PI/3),  -sin(4*M_PI/3), // Projections on Y
+          1.0/R,       1.0/R,            1.0/R;         // Contribution to Yaw
+
     Eigen::Matrix<double, 3, 1> omega;
+    // Your specific 2-0-1 mapping
+    omega << state_interfaces_[2].get_value(),
+             state_interfaces_[0].get_value(),
+             state_interfaces_[1].get_value();
 
-    M << -sin(q1), -sin(q2), -sin(q3),
-          cos(q1),  cos(q2),  cos(q3),
-          1.0/R,    1.0/R,    1.0/R;
+    Eigen::Matrix<double, 3, 1> vel_body = M * omega;
 
-    omega << state_interfaces_[0].get_value(),
-             state_interfaces_[1].get_value(),
-             state_interfaces_[2].get_value();
+    // Apply the correct kinematic scaling
+    vel_body(0) *= (r * (2.0/3.0)); 
+    vel_body(1) *= (r * (2.0/3.0));
+    vel_body(2) *= (r / 3.0); 
 
-    return (r / 3.0) * M * omega;
+    return vel_body;
 }
 
 std::vector<double> PidController::inverse_kinematic(const geometry_msgs::msg::Twist &command)
@@ -102,34 +107,15 @@ std::vector<double> PidController::inverse_kinematic(const geometry_msgs::msg::T
 void PidController::Odometry(auto vel, double dt)
 {
     // remember that the odom itself is the fixed frame treat like a global frame and base_link is its child 
-
     double theta = pseudo_odom_[2];
 
     pseudo_odom_[0] += (vel(0) * cos(theta) - vel(1) * sin(theta)) * dt;        // vel_x
     pseudo_odom_[1] += (vel(0) * sin(theta) + vel(1) * cos(theta)) * dt;        // vel_y
-    pseudo_odom_[2] += vel(2) * dt;     // angular pos
+    pseudo_odom_[2] -= vel(2) * dt;     // angular pos
 
     pseudo_odom_[3] = vel(0);       // linear velocity x 
-    pseudo_odom_[4] = vel(2);       // angular velocity yaw
+    pseudo_odom_[4] = -vel(2);       // angular velocity yaw
 }
-
-// void PidController::timer_callback()
-// {
-//     // odom and its tf2
-//     auto odom_ptr = rt_odom_buffer_.readFromRT();
-//     auto tf2_ptr = rt_tf_boardcast_buffer_.readFromRT();
-
-//     if (odom_ptr)
-//     {
-//         odom_pub_->publish(*odom_ptr);
-//     }
-
-//     if (tf2_ptr)
-//     {
-//         tf_boardcaster_->sendTransform(*tf2_ptr);
-//     }
-
-// }
 
 double PidController::compute_pid_command(double& error, double& dt, int motor_num)
 {
@@ -199,21 +185,23 @@ controller_interface::return_type PidController::update(const rclcpp::Time & tim
 
     // compute all the kinematic and odometry
     auto twist = PidController::forward_kinematic();
+
+
     PidController::Odometry(twist, dt);
     rt_twist_buffer_.writeFromNonRT(twist);
 
     // compute quaternion
-    q.setRPY(0, 0, pseudo_odom_[2]);
+    q.setRPY(0, 0, pseudo_odom_[2] + params_.init_odom_val.Yaw);
     geometry_msgs::msg::Quaternion q_msg = tf2::toMsg(q);
 
 
     // Odom message 
     odom_message.header.stamp = time;
-    odom_message.header.frame_id = "odom";
-    odom_message.child_frame_id = "base_link";
+    odom_message.header.frame_id = params_.header_frame;
+    odom_message.child_frame_id = params_.child_frame;
 
-    odom_message.pose.pose.position.x = pseudo_odom_[0];
-    odom_message.pose.pose.position.y = pseudo_odom_[1];
+    odom_message.pose.pose.position.x = pseudo_odom_[0] + params_.init_odom_val.X;
+    odom_message.pose.pose.position.y = pseudo_odom_[1] + params_.init_odom_val.Y;
     odom_message.pose.pose.position.z = 0.0;
 
     odom_message.pose.pose.orientation = q_msg;
@@ -223,11 +211,11 @@ controller_interface::return_type PidController::update(const rclcpp::Time & tim
 
     // tf message
     tf.header.stamp = time;
-    tf.header.frame_id = "odom";
-    tf.child_frame_id = "base_link";
+    tf.header.frame_id = params_.header_frame;
+    tf.child_frame_id = params_.child_frame;
 
-    tf.transform.translation.x = pseudo_odom_[0];
-    tf.transform.translation.y = pseudo_odom_[1];
+    tf.transform.translation.x = pseudo_odom_[0] + params_.init_odom_val.X;
+    tf.transform.translation.y = pseudo_odom_[1] + params_.init_odom_val.Y;
     tf.transform.translation.z = 0.0;
 
     tf.transform.rotation = q_msg;

@@ -5,7 +5,6 @@ pid_controller:
   num_of_wheels: {type: int, default_value: 3}
   header_frame: {type: string, default_value: "odom"}
   child_frame: {type: string, default_value: "base_link"}
-  
   i_min: {type: double, default_value: -3.0}
   i_max: {type: double, default_value: 3.0}
   wheel_1:
@@ -20,3 +19,7 @@ pid_controller:
     kp: {type: double, default_value: 1.0}
     ki: {type: double, default_value: 0.0}
     kd: {type: double, default_value: 0.0}
+  init_odom_val:
+    X: {type: double, default_value: 0.0}
+    Y: {type: double, default_value: 0.0}
+    Yaw: {type: double, default_value: 0.0}

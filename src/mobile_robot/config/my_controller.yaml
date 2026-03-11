@@ -9,7 +9,6 @@ controller_manager:
     omni_base_controller:
       type: omni_pid_controller/PidController
 
-# This section is the key to stopping those "Authority undetectable" errors
 joint_state_broadcaster:
   ros__parameters:
     use_sim_time: true
@@ -22,39 +21,33 @@ joint_state_broadcaster:
 omni_base_controller:
   ros__parameters:
     use_sim_time: true
-    
-    # Kinematics and Frames
     header_frame: "odom"
     child_frame: "base_link"
     num_of_wheels: 3
     robot_radius: 0.13
     wheel_radius: 0.06
-
-    # Joint names for the PID logic
     dof_names:
       - mobile_base_Revolute_1
       - mobile_base_Revolute_2
       - mobile_base_Revolute_3
-
-    # Controller Interfaces
     command_interface: effort        
     state_interfaces:
       - velocity
-
-    # PID Limits
     i_min: -5.0
     i_max: 5.0
-
-    # PID Gains
     wheel_1:
-      kp: 0.3
+      kp: 0.5
       ki: 0.1
       kd: 0.0
     wheel_2:
-      kp: 0.3
+      kp: 0.5
       ki: 0.1
       kd: 0.0
     wheel_3:
-      kp: 0.3
+      kp: 0.5
       ki: 0.1
       kd: 0.0
+    init_odom_vel:
+      X: 0.0
+      Y: 0.2
+      Yaw: 0.0

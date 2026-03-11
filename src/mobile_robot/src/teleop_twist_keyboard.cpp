@@ -101,11 +101,11 @@ private:
                     break;
 
                 case 'r':
-                    msg.angular.z = 0.2;
+                    msg.angular.z = 0.5;
                     break;
 
                 case 't':
-                    msg.angular.z = -0.2;
+                    msg.angular.z = -0.5;
                     break;
 
                 case 'b':

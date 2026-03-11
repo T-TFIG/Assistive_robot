@@ -23,7 +23,6 @@ def generate_launch_description():
         get_package_share_directory('turtlebot3_gazebo'),
         'worlds',
         'turtlebot3_house.world'
-
     )
 
     # 3. Robot State Publisher
@@ -54,8 +53,8 @@ def generate_launch_description():
                 arguments=[
                     '-entity', 'my_robot', 
                     '-topic', 'robot_description',
-                    '-x', '0.0', '-y', '0.0', '-z', '0.0',
-                    '-Y', '1.57' # 45 degrees in radians
+                    '-x', '0.0', '-y', '0.2', '-z', '0.1',
+                    '-Y', '-0.0' # 45 degrees in radians
                 ],
                 output='screen'
             )

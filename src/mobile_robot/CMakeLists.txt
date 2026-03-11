@@ -10,6 +10,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(gazebo_plugins REQUIRED)
 find_package(generate_parameter_library REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
