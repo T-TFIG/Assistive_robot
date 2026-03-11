@@ -70,51 +70,59 @@ Eigen::Matrix<double, 3 ,1> PidController::forward_kinematic()
 
     // The projection of wheel velocities onto Robot X, Y, and Theta
     Eigen::Matrix<double, 3, 3> M;
-    M <<  cos(0.0),   cos(2*M_PI/3),   cos(4*M_PI/3), // Projections on X
-         -sin(0.0),  -sin(2*M_PI/3),  -sin(4*M_PI/3), // Projections on Y
-          1.0/R,       1.0/R,            1.0/R;         // Contribution to Yaw
+    M << -R,       1.0,                     0,
+         -R,    -1.0/2.0,      -sin(M_PI/3.0),
+         -R,    -1.0/2.0,       sin(M_PI/3.0); 
+
+    Eigen::Matrix3d M_inv = M.inverse();
 
     Eigen::Matrix<double, 3, 1> omega;
-    // Your specific 2-0-1 mapping
-    omega << state_interfaces_[2].get_value(),
-             state_interfaces_[0].get_value(),
-             state_interfaces_[1].get_value();
+    omega << state_interfaces_[0].get_value(),
+             state_interfaces_[1].get_value(),
+             state_interfaces_[2].get_value();
 
-    Eigen::Matrix<double, 3, 1> vel_body = M * omega;
-
-    // Apply the correct kinematic scaling
-    vel_body(0) *= (r * (2.0/3.0)); 
-    vel_body(1) *= (r * (2.0/3.0));
-    vel_body(2) *= (r / 3.0); 
+    Eigen::Matrix<double, 3, 1> vel_body = r * (M_inv * omega);
 
     return vel_body;
 }
 
-std::vector<double> PidController::inverse_kinematic(const geometry_msgs::msg::Twist &command)
+Eigen::Matrix<double ,3 ,1> PidController::inverse_kinematic(const geometry_msgs::msg::Twist &command)
 {   
-    double vx = command.linear.x;
-    double vy = command.linear.y;
-    double omega = command.angular.z;
+    const double r = params_.wheel_radius;
+    const double R = params_.robot_radius;
 
-    std::vector<double> command_joint(3);
-    command_joint[0] = (-0.5 * vx + 0.866 * vy + params_.robot_radius * omega) / params_.wheel_radius;
-    command_joint[1] = (-0.5 * vx - 0.866 * vy + params_.robot_radius * omega) / params_.wheel_radius;
-    command_joint[2] = (vx + params_.robot_radius * omega) / params_.wheel_radius;
+    Eigen::Matrix<double, 3, 3> M;
+    M << -R,       1.0,                     0,
+         -R,    -1.0/2.0,      -sin(M_PI/3.0),
+         -R,    -1.0/2.0,       sin(M_PI/3.0); 
 
-    return command_joint;
+    Eigen::Matrix<double, 3, 1> omega;
+    omega << command.angular.z,
+             command.linear.x,
+             command.linear.y;
+    
+    Eigen::Matrix<double, 3, 1> effort = (1.0/r) * M * omega;
+
+    // std::cout << effort(0) << std::endl;
+    // std::cout << effort(1) << std::endl;
+    // std::cout << effort(2) << std::endl;
+
+    return effort;
 }
 
 void PidController::Odometry(auto vel, double dt)
 {
+    // vel = [w vx vy]^T
+
     // remember that the odom itself is the fixed frame treat like a global frame and base_link is its child 
     double theta = pseudo_odom_[2];
 
-    pseudo_odom_[0] += (vel(0) * cos(theta) - vel(1) * sin(theta)) * dt;        // vel_x
-    pseudo_odom_[1] += (vel(0) * sin(theta) + vel(1) * cos(theta)) * dt;        // vel_y
-    pseudo_odom_[2] -= vel(2) * dt;     // angular pos
+    pseudo_odom_[0] += (vel(1) * cos(theta) - vel(2) * sin(theta)) * dt;        // vel_x
+    pseudo_odom_[1] += (vel(1) * sin(theta) + vel(2) * cos(theta)) * dt;        // vel_y
+    pseudo_odom_[2] += vel(0) * dt;     // angular pos
 
-    pseudo_odom_[3] = vel(0);       // linear velocity x 
-    pseudo_odom_[4] = -vel(2);       // angular velocity yaw
+    pseudo_odom_[3] = vel(1);       // linear velocity x 
+    pseudo_odom_[4] = vel(0);       // angular velocity yaw
 }
 
 double PidController::compute_pid_command(double& error, double& dt, int motor_num)
@@ -154,7 +162,7 @@ controller_interface::return_type PidController::update(const rclcpp::Time & tim
         cmd_vel.angular.z = 0.0;
     }
     
-    std::vector<double> command_joint = inverse_kinematic(cmd_vel);
+    Eigen::Matrix<double, 3, 1> command_joint = inverse_kinematic(cmd_vel);
     
     double dt = period.seconds();
 
@@ -171,7 +179,7 @@ controller_interface::return_type PidController::update(const rclcpp::Time & tim
     for (int i = 0; i < 3; i++)
     {
         double current_vel = state_interfaces_[i].get_value();
-        double error = command_joint[i] - current_vel;
+        double error = command_joint(i) - current_vel;
         
         // prevent NaN explosion
         double output = compute_pid_command(error, dt, i);

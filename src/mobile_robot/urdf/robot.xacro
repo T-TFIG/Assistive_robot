@@ -81,16 +81,16 @@
   </xacro:macro>
 
   <xacro:omni_wheel 
-    prefix="2" 
+    prefix="1" 
     mesh_num="2"
-    joint_name="mobile_base_Revolute_3" 
+    joint_name="mobile_base_Revolute_1" 
     joint_xyz="0.0 0.1766 0.025" 
     joint_rpy="-1.5708 0 0"
     v_xyz="2.22e-08 0.018 0.715" 
     v_rpy="1.5708 -1.5708 0"/>
   
   <xacro:omni_wheel 
-    prefix="3" 
+    prefix="2" 
     mesh_num="3"
     joint_name="mobile_base_Revolute_2" 
     joint_xyz="0.15294 -0.0883 0.025" 
@@ -99,9 +99,9 @@
     v_rpy="1.5708 -1.5708 0"/>
   
   <xacro:omni_wheel 
-    prefix="1" 
+    prefix="3"
     mesh_num="1"
-    joint_name="mobile_base_Revolute_1" 
+    joint_name="mobile_base_Revolute_3" 
     joint_xyz="-0.15294 -0.0883 0.025" 
     joint_rpy="-1.5708 0 2.0944"
     v_xyz="-2.52e-08 0.018 -0.738" 

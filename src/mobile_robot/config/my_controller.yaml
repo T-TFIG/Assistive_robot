@@ -24,7 +24,7 @@ omni_base_controller:
     header_frame: "odom"
     child_frame: "base_link"
     num_of_wheels: 3
-    robot_radius: 0.13
+    robot_radius: 0.180
     wheel_radius: 0.06
     dof_names:
       - mobile_base_Revolute_1

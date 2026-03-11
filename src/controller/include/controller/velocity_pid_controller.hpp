@@ -48,7 +48,7 @@ namespace omni_pid_controller
       double i_min;
     };
 
-    std::vector<double> inverse_kinematic(const geometry_msgs::msg::Twist &command);
+    Eigen::Matrix<double ,3 ,1> inverse_kinematic(const geometry_msgs::msg::Twist &command);
     void Odometry(auto vel, double dt);
     Eigen::Matrix<double, 3, 1> forward_kinematic();
 
