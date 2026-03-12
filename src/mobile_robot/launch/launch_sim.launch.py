@@ -10,7 +10,6 @@ def generate_launch_description():
     pkg_path = get_package_share_directory(package_name)
     controller_yaml = os.path.join(pkg_path, "config", 'my_controller.yaml')
     
-    # 1. Setup Model Paths
     install_dir = os.path.abspath(os.path.join(pkg_path, '..'))
 
     set_gazebo_model_path = SetEnvironmentVariable(
@@ -18,20 +17,23 @@ def generate_launch_description():
         value=[install_dir]
     )
 
-    # 2. Path to the House World
     world_path = os.path.join(
         get_package_share_directory('turtlebot3_gazebo'),
         'worlds',
         'turtlebot3_house.world'
     )
 
-    # 3. Robot State Publisher
+    rviz_config = os.path.join(
+        get_package_share_directory(package_name),
+        'config',
+        'slam.rviz'
+    )
+
     rsp = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(pkg_path, 'launch', 'rsp.launch.py')]),
         launch_arguments={'use_sim_time': 'true'}.items()
     )
 
-    # 4. Gazebo (passing the controller params here)
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(get_package_share_directory('gazebo_ros'), 'launch', 'gazebo.launch.py')
@@ -43,7 +45,6 @@ def generate_launch_description():
         }.items()
     )
 
-    # 5. Delayed Spawn Robot (Wait 5 seconds for world to load)
     spawn_robot = TimerAction(
         period=5.0,
         actions=[
@@ -61,7 +62,6 @@ def generate_launch_description():
         ]
     )
 
-    # 6. Controller Spawners
     omni_drive = Node(
         package="controller_manager",
         executable='spawner',
@@ -76,12 +76,12 @@ def generate_launch_description():
         output="screen",
     )
 
-    # 7. RViz2
     rviz = Node(
         package='rviz2',
         executable='rviz2',
         name='rviz2',
         parameters=[{'use_sim_time': True}],
+        arguments=['-d', rviz_config],
         output='screen'
     )
 
@@ -116,7 +116,6 @@ def generate_launch_description():
         period=10.0, # Wait until broadcaster is up
         actions=[omni_drive]
     )
-
 
     return LaunchDescription([
         set_gazebo_model_path,
