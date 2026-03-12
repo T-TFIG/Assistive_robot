@@ -26,8 +26,10 @@ def generate_launch_description():
     rviz_config = os.path.join(
         get_package_share_directory(package_name),
         'config',
-        'slam.rviz'
+        'nav2.rviz'
     )
+
+    nav2_params = os.path.join(pkg_path, "config", "nav2_params.yaml")
 
     rsp = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(pkg_path, 'launch', 'rsp.launch.py')]),
@@ -55,7 +57,7 @@ def generate_launch_description():
                     '-entity', 'my_robot', 
                     '-topic', 'robot_description',
                     '-x', '0.0', '-y', '0.2', '-z', '0.1',
-                    '-Y', '-0.0' # 45 degrees in radians
+                    '-Y', '-0.0'
                 ],
                 output='screen'
             )
@@ -85,36 +87,36 @@ def generate_launch_description():
         output='screen'
     )
 
-    slam_toolbox = Node(
-        package='slam_toolbox',
-        executable='async_slam_toolbox_node',
-        name='slam_toolbox',
-        output='screen',
-        parameters=[
-            {
-                'use_sim_time': True,
-                'odom_frame': 'odom',
-                'base_frame': 'base_link',
-                'scan_topic': '/scan',
-                'mode': 'mapping',
-                'transform_timeout': 0.1,
-                'map_update_interval': 5.0,
-                'resolution': 0.05,
-                'max_laser_range': 20.0,
-                'minimum_time_interval': 0.5,
-                'transform_publish_period': 0.02, # 50Hz
-            }
-        ]
+    nav2 = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory('nav2_bringup'),
+                'launch',
+                'bringup_launch.py'
+            )
+        ),
+        launch_arguments={
+            'use_sim_time': 'true',
+            'map': os.path.join(pkg_path, 'maps', 'turtlebot3_house.yaml'),
+            'params_file': nav2_params,
+            'autostart': 'true',
+            'use_composition': 'False'
+        }.items()
     )
 
     delayed_joint_broadcaster = TimerAction(
-        period=8.0, # Wait until after the robot is spawned (5s + 3s buffer)
+        period=8.0,
         actions=[joint_state_broadcaster]
     )
 
     delayed_omni_drive = TimerAction(
-        period=10.0, # Wait until broadcaster is up
+        period=10.0,
         actions=[omni_drive]
+    )
+
+    delayed_nav2 = TimerAction(
+        period=12.0,  
+        actions=[nav2]
     )
 
     return LaunchDescription([
@@ -124,6 +126,6 @@ def generate_launch_description():
         spawn_robot,
         delayed_joint_broadcaster,
         delayed_omni_drive,
-        # slam_toolbox,
+        delayed_nav2,
         rviz
     ])
