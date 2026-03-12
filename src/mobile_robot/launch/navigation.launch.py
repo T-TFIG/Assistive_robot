@@ -104,6 +104,14 @@ def generate_launch_description():
         }.items()
     )
 
+    twist_mux = Node(
+        package = 'mobile_robot',
+        executable='twist_mux',
+        parameters=[{'use_sim_time': True}],
+        output='screen'
+    )
+
+
     delayed_joint_broadcaster = TimerAction(
         period=8.0,
         actions=[joint_state_broadcaster]

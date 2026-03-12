@@ -21,6 +21,7 @@ generate_parameter_library(teleop_twist_parameters
 )
 
 add_executable(teleop src/teleop_twist_keyboard.cpp)
+add_executable(twist_mux src/teleop_twist_mux.cpp)
 
 ament_target_dependencies(
   teleop 
@@ -29,10 +30,17 @@ ament_target_dependencies(
   geometry_msgs
 )
 
+ament_target_dependencies(
+  twist_mux
+  rclcpp
+  geometry_msgs
+)
+
 target_link_libraries(teleop teleop_twist_parameters)
 
 install(TARGETS
   teleop
+  twist_mux
   DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -42,6 +50,7 @@ install(
     meshes
     launch
     config
+    maps
   DESTINATION share/${PROJECT_NAME}
 )
 
