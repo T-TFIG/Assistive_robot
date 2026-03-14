@@ -39,9 +39,9 @@ def generate_launch_description():
             os.path.join(get_package_share_directory('gazebo_ros'), 'launch', 'gazebo.launch.py')
         ),
         launch_arguments={
-            'world': world_path,
+           'world': world_path,
             'use_sim_time': 'true',
-            'extra_gazebo_args': '--ros-args --params-file ' + controller_yaml
+            # 'extra_gazebo_args': '--ros-args --params-file ' + controller_yaml
         }.items()
     )
 
@@ -124,6 +124,6 @@ def generate_launch_description():
         spawn_robot,
         delayed_joint_broadcaster,
         delayed_omni_drive,
-        # slam_toolbox,
+        slam_toolbox,
         rviz
     ])

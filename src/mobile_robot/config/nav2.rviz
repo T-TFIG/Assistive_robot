@@ -53,17 +53,17 @@ Visualization Manager:
       Topic:
         Value: /local_plan
 
-    - Class: nav2_rviz_plugins/Costmap
+    - Class: rviz_default_plugins/Map
       Enabled: true
       Name: Global Costmap
       Topic:
-        Value: /global_costmap/costmap
+        Value: /global_costmap/costmap   # ← fix topic name too
 
-    - Class: nav2_rviz_plugins/Costmap
+    - Class: rviz_default_plugins/Map
       Enabled: true
       Name: Local Costmap
       Topic:
-        Value: /local_costmap/costmap
+        Value: /local_costmap/costmap    # ← fix topic name too
 
   Global Options:
     Fixed Frame: map

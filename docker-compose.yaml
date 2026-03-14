@@ -7,12 +7,13 @@ services:
     ipc: host
     privileged: true
     environment:
-      - DISPLAY=${DISPLAY}
+      - DISPLAY=:1
       - QT_X11_NO_MITSHM=1
-      - LIBGL_ALWAYS_SOFTWARE=1       
-      - GAZEBO_IP=127.0.0.1           
+      - LIBGL_ALWAYS_SOFTWARE=1
+      - GAZEBO_IP=127.0.0.1
+      - GAZEBO_MASTER_URI=http://localhost:11345
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      - .:/Assistive_robot/src/mobile_robot
+      - ./src:/Assistive_robot/src   # ← mount src/ to src/ not whole project
     stdin_open: true
     tty: true

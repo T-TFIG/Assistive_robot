@@ -26,6 +26,9 @@ RUN apt-get update && apt-get install -y \
     ros-humble-rviz-default-plugins \
     && rm -rf /var/lib/apt/list/*
 
+RUN apt-get install nano
+
+
 # make our workspace
 WORKDIR /Assistive_robot
 COPY ./src ./src

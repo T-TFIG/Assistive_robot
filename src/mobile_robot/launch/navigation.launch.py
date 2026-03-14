@@ -42,8 +42,7 @@ def generate_launch_description():
         ),
         launch_arguments={
             'world': world_path,
-            'use_sim_time': 'true',
-            'extra_gazebo_args': '--ros-args --params-file ' + controller_yaml
+            'use_sim_time': 'true'
         }.items()
     )
 
@@ -107,7 +106,6 @@ def generate_launch_description():
     twist_mux = Node(
         package = 'mobile_robot',
         executable='twist_mux',
-        parameters=[{'use_sim_time': True}],
         output='screen'
     )
 
@@ -123,7 +121,7 @@ def generate_launch_description():
     )
 
     delayed_nav2 = TimerAction(
-        period=12.0,  
+        period=15.0,  
         actions=[nav2]
     )
 
@@ -135,5 +133,6 @@ def generate_launch_description():
         delayed_joint_broadcaster,
         delayed_omni_drive,
         delayed_nav2,
-        rviz
+        rviz,
+        twist_mux
     ])

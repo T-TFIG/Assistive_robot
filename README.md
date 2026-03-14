@@ -1,0 +1,3 @@
+Thank you for taking the time to explore my project! My goal is to build a deep, end-to-end understanding of robotics by implementing cutting-edge techniques from scratch. I am committed to exploring the 'big picture' of robotics—from low-level control to high-level autonomy—and documenting every step here on GitHub.
+
+This project is a continuous learning journey, and I welcome all feedback, comments, and opinions. If you spot something that could be improved or fixed, please feel free to reach out. I am always looking for ways to refine my skills and code!
