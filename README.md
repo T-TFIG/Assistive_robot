@@ -39,8 +39,8 @@ Even though I am currently working primarily in simulation rather than on real h
 
 Below is the robot platform that inspired this project.  
 The robot was **modified and improved by me and my team members**, so its appearance is slightly different from the original version that participated in the RoboCup competition.
-![Mobile Robot](hedhom.jpeg)
-![Mobile Robot2](hedhom2.jpeg)
+![Mobile Robot](picture_and_gif/hedhom.jpeg)
+![Mobile Robot2](picture_and_gif/hedhom2.jpeg)
 
 ---
 
