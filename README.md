@@ -22,6 +22,13 @@ The long-term vision of this project is to create a **full-stack robotics learni
 
 ---
 
+## Navigation Demonstration
+
+Here is a video of the robot navigating (GIF format for GitHub):
+
+![Navigation Demo](picture_and_gif/navigation.gif)
+---
+
 ## Inspiration and Background
 
 This project is inspired by a robot platform I previously worked with during the **IRAIC robotics competition in Thailand**.
@@ -86,11 +93,11 @@ The robot currently supports the following capabilities:
 
 - Robot simulation using Gazebo
 - Robot description using URDF/Xacro
-- LiDAR sensor integration
-- SLAM-based map generation
-- Static map loading
-- AMCL localization
-- Nav2 autonomous navigation
+- LiDAR sensor integration  
+- SLAM-based map generation     (used toolbox)
+- Static map loading    
+- AMCL localization             (used toolbox)
+- Nav2 autonomous navigation    (used toolbox)
 - RViz visualization and debugging tools
 ---
 
@@ -192,10 +199,10 @@ RViz will display:
 Planned improvements include:
 
 - Custom Behavior Trees for navigation
-- Advanced obstacle avoidance
-- Multi-room navigation
+- Custom SLAM-based map generation
+- Custom AMCL localization
+- Custom autonomous navigation
 - Object detection and semantic mapping
-- Integration with real robot hardware
 - Multi-robot coordination
 - Reinforcement learning for navigation
 
