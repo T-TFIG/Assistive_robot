@@ -226,3 +226,9 @@ This project aims to strengthen understanding in:
 This project is part of an ongoing learning journey, and feedback is always welcome.
 
 If you notice something that could be improved or corrected, feel free to open an issue or reach out. Constructive suggestions and discussions are greatly appreciated.
+
+## 📚 Documentation
+
+You can find more details about the algorithms used in this project:
+
+- [ICP Module](docs/icp_module.md)
