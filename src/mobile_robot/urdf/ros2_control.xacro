@@ -42,6 +42,8 @@
   </ros2_control>
 
   <!-- Gazebo ros2_control plugin -->
+  <!-- src/mobile_robot/config/my_controller.yaml -->
+  <!-- $(find mobile_robot)/config/my_controller.yaml -->
   <gazebo>
     <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
       <parameters>$(find mobile_robot)/config/my_controller.yaml</parameters>

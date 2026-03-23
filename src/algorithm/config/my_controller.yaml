@@ -1,0 +1,2 @@
+teleop_keyboard:
+  topic_name: {type: string, default_value: "/omni_base_controller/keyboard"}

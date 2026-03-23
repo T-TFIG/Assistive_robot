@@ -58,6 +58,7 @@ private:
     rclcpp::TimerBase::SharedPtr timer_;
     rclcpp::Time last_msg_time_;
     bool manual_active_ = false;
+    
 };
 
 int main(int argc, char * argv[]) {
