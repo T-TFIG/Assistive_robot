@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<robot name="mobile_manipulator" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find-pkg-share ur_description)/urdf/ur5.urdf.xacro"/>
+
+  <link name="ur5_mount_link">
+    <visual>
+      <geometry>
+        <cylinder radius="0.12" length="0.05"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="base_to_mount" type="fixed">
+    <parent link="base_link"/>
+    <child link="ur5_mount_link"/>
+    <origin xyz="0 0 0.4" rpy="0 0 0"/>
+  </joint>
+
+  <xacro:ur5_robot prefix="ur5_"/>
+
+  <joint name="mount_to_ur5" type="fixed">
+    <parent link="ur5_mount_link"/>
+    <child link="ur5_base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+</robot>
