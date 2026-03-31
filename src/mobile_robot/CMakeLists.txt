@@ -51,6 +51,8 @@ install(
     launch
     config
     maps
+    worlds
+    models
   DESTINATION share/${PROJECT_NAME}
 )
 

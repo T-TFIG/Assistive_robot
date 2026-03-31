@@ -59,10 +59,10 @@ controller_interface::InterfaceConfiguration PidController::command_interface_co
 
     // ⚠️ MUST match URDF joint names
     config.names = {
-        "wheel_1_joint/effort",
-        "wheel_2_joint/effort",
-        "wheel_3_joint/effort",
-        "wheel_4_joint/effort"
+        "mobile_base_Revolute_1/effort",
+        "mobile_base_Revolute_2/effort",
+        "mobile_base_Revolute_3/effort",
+        "mobile_base_Revolute_4/effort"
     };
 
     return config;
@@ -74,10 +74,10 @@ controller_interface::InterfaceConfiguration PidController::state_interface_conf
     config.type = controller_interface::interface_configuration_type::INDIVIDUAL;
 
     config.names = {
-        "wheel_1_joint/velocity",
-        "wheel_2_joint/velocity",
-        "wheel_3_joint/velocity",
-        "wheel_4_joint/velocity"
+        "mobile_base_Revolute_1/velocity",
+        "mobile_base_Revolute_2/velocity",
+        "mobile_base_Revolute_3/velocity",
+        "mobile_base_Revolute_4/velocity"
     };
 
     return config;
@@ -86,22 +86,22 @@ controller_interface::InterfaceConfiguration PidController::state_interface_conf
 Eigen::Matrix<double, 4, 1> PidController::inverse_kinematic(const geometry_msgs::msg::Twist &cmd)
 {
     const double r = params_.wheel_radius;
-    const double L = params_.robot_length / 2.0;
-    const double W = params_.robot_width / 2.0;
+    const double L = params_.robot_length;
+    const double W = params_.robot_width;
 
     double k = L + W;
 
     Eigen::Matrix<double, 4, 3> M;
-
-    M <<  1, -1, -k,
-          1,  1,  k,
-          1,  1, -k,
-          1, -1,  k;
+    M <<  1, -1, -(L+W),
+          1,  1,  (L+W),
+          1,  1, -(L+W),
+          1, -1,  (L+W);
 
     Eigen::Matrix<double, 3, 1> v;
-    v << cmd.linear.x,
-         cmd.linear.y,
-         cmd.angular.z;
+
+    v << -cmd.angular.z,
+         -cmd.linear.y,
+         -cmd.linear.x;
 
     return (1.0 / r) * M * v;
 }
@@ -109,17 +109,16 @@ Eigen::Matrix<double, 4, 1> PidController::inverse_kinematic(const geometry_msgs
 Eigen::Matrix<double, 3, 1> PidController::forward_kinematic()
 {
     const double r = params_.wheel_radius;
-    const double L = params_.robot_length / 2.0;
-    const double W = params_.robot_width / 2.0;
+    const double L = params_.robot_length;
+    const double W = params_.robot_width;
 
     double k = L + W;
 
     Eigen::Matrix<double, 4, 3> M;
-
-    M <<  1, -1, -k,
-          1,  1,  k,
-          1,  1, -k,
-          1, -1,  k;
+    M <<  1, -1, -(L+W),
+          1,  1,  (L+W),
+          1,  1, -(L+W),
+          1, -1,  (L+W);
 
     Eigen::Matrix<double, 3, 4> M_pinv =
         (M.transpose() * M).inverse() * M.transpose();

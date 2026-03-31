@@ -16,6 +16,7 @@ joint_state_broadcaster:
       - mobile_base_Revolute_1
       - mobile_base_Revolute_2
       - mobile_base_Revolute_3
+      - mobile_base_Revolute_4
     map_interface_to_joint_state: true
 
 omni_base_controller:
@@ -23,28 +24,34 @@ omni_base_controller:
     use_sim_time: true
     header_frame: "odom"
     child_frame: "base_link"
-    num_of_wheels: 3
-    robot_radius: 0.180
-    wheel_radius: 0.06
+    num_of_wheels: 4
+    robot_length: 0.5
+    robot_width: 0.335
+    wheel_radius: 0.0635
     dof_names:
       - mobile_base_Revolute_1
       - mobile_base_Revolute_2
       - mobile_base_Revolute_3
+      - mobile_base_Revolute_4
     command_interface: effort        
     state_interfaces:
       - velocity
     i_min: -5.0
     i_max: 5.0
     wheel_1:
-      kp: 0.5
+      kp: 0.2
       ki: 0.1
       kd: 0.0
     wheel_2:
-      kp: 0.5
+      kp: 0.2
       ki: 0.1
       kd: 0.0
     wheel_3:
-      kp: 0.5
+      kp: 0.2
+      ki: 0.1
+      kd: 0.0
+    wheel_4:
+      kp: 0.2
       ki: 0.1
       kd: 0.0
     init_odom_vel:

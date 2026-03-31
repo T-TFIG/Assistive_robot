@@ -1,8 +1,9 @@
 pid_controller:
-  dof_names: {type: string_array, default_value: ["wheel1", "wheel2", "wheel3"]}
-  robot_radius: {type: double, default_value: 0.13}
+  dof_names: {type: string_array, default_value: ["wheel1", "wheel2", "wheel3", "wheel4"]}
+  robot_length: {type: double, default_value: 0.13}
+  robot_width: {type: double, default_value: 0.13}
   wheel_radius: {type: double, default_value: 0.06}
-  num_of_wheels: {type: int, default_value: 3}
+  num_of_wheels: {type: int, default_value: 4}
   header_frame: {type: string, default_value: "odom"}
   child_frame: {type: string, default_value: "base_link"}
   i_min: {type: double, default_value: -3.0}
@@ -16,6 +17,10 @@ pid_controller:
     ki: {type: double, default_value: 0.0}
     kd: {type: double, default_value: 0.0}
   wheel_3:
+    kp: {type: double, default_value: 1.0}
+    ki: {type: double, default_value: 0.0}
+    kd: {type: double, default_value: 0.0}
+  wheel_4:
     kp: {type: double, default_value: 1.0}
     ki: {type: double, default_value: 0.0}
     kd: {type: double, default_value: 0.0}

@@ -1,68 +1,19 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <!-- ros2_control configuration -->
-  <ros2_control name="GazeboSystem" type="system">
+  <ros2_control name="IgnitionSystem" type="system">
     <hardware>
-      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
     </hardware>
-    
-    <!-- Joint 1 -->
-    <joint name="mobile_base_Revolute_1">
-      <command_interface name="effort">
-        <param name="min">-10</param>
-        <param name="max">10</param>
-      </command_interface>
-      <state_interface name="position"/> 
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-    
-    <!-- Joint 2 -->
-    <joint name="mobile_base_Revolute_2">
-      <command_interface name="effort">
-        <param name="min">-10</param>
-        <param name="max">10</param>
-      </command_interface>
-      <state_interface name="position"/> 
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-    
-    <!-- Joint 3 -->
-    <joint name="mobile_base_Revolute_3">
-      <command_interface name="effort">
-        <param name="min">-10</param>
-        <param name="max">10</param>
-      </command_interface>
-      <state_interface name="position"/> 
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-
-    <!-- Joint 4 -->
-    <joint name="mobile_base_Revolute_4">
-       <command_interface name="effort">
-        <param name="min">-10</param>
-        <param name="max">10</param>
-      </command_interface>
-      <state_interface name="position"/> 
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-
+    <joint name="mobile_base_Revolute_1"><command_interface name="effort"><param name="min">-10</param><param name="max">10</param></command_interface><state_interface name="position"/><state_interface name="velocity"/></joint>
+    <joint name="mobile_base_Revolute_2"><command_interface name="effort"><param name="min">-10</param><param name="max">10</param></command_interface><state_interface name="position"/><state_interface name="velocity"/></joint>
+    <joint name="mobile_base_Revolute_3"><command_interface name="effort"><param name="min">-10</param><param name="max">10</param></command_interface><state_interface name="position"/><state_interface name="velocity"/></joint>
+    <joint name="mobile_base_Revolute_4"><command_interface name="effort"><param name="min">-10</param><param name="max">10</param></command_interface><state_interface name="position"/><state_interface name="velocity"/></joint>
   </ros2_control>
 
-
   <gazebo>
-    <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+    <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
       <parameters>$(find mobile_robot)/config/my_controller.yaml</parameters>
-      <ros>
-          <parameter name="use_sim_time" value="true" type="bool"/>
-      </ros>
-      <publish_odom_tf>false</publish_odom_tf>
-      <publish_wheel_tf>false</publish_wheel_tf>
     </plugin>
   </gazebo>
-
 </robot>
