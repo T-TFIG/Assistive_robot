@@ -9,20 +9,13 @@
       <real_time_update_rate>1000</real_time_update_rate>
     </physics>
 
-    
-        <!--model name="aws_robomaker_warehouse_RoofB_01_001">
-        <include>
-            <uri>model://aws_robomaker_warehouse_RoofB_01</uri>
-        </include>
-        <pose frame="">0.0 0.0 0 0 0 0</pose>
-	</model-->
 
-        <model name="aws_robomaker_warehouse_ShelfF_01_001">
+    <model name="aws_robomaker_warehouse_ShelfF_01_001">
         <include>
             <uri>model://aws_robomaker_warehouse_ShelfF_01</uri>
         </include>
-        <pose frame="">-5.795143 -0.956635 0 0 0 0</pose>
-	</model>
+        <pose>-5.795143 -0.956635 0 0 0 0</pose>
+    </model>
 
         <model name="aws_robomaker_warehouse_WallB_01_001">
         <include>
@@ -73,26 +66,6 @@
         <pose frame="">4.73156 -6.750542 0 0 0 0</pose>
 	</model>
 
-        <!--model name="aws_robomaker_warehouse_DeskC_01_001">
-        <include>
-            <uri>model://aws_robomaker_warehouse_DeskC_01</uri>
-        </include>
-        <pose frame="">-0.061684 6.135864 0 0 0 0</pose>
-	</model>
-
-        <model name="aws_robomaker_warehouse_DeskC_01_002">
-        <include>
-            <uri>model://aws_robomaker_warehouse_DeskC_01</uri>
-        </include>
-        <pose frame="">-0.061684 3.039 0 0 0 0</pose>
-	</model>
-
-        <model name="aws_robomaker_warehouse_DeskC_01_003">
-        <include>
-            <uri>model://aws_robomaker_warehouse_DeskC_01</uri>
-        </include>
-        <pose frame="">-0.061684 -6.6493 0 0 0 0</pose>
-	</model-->
 
         <model name="aws_robomaker_warehouse_GroundB_01_001">
         <include>
@@ -108,7 +81,6 @@
         <pose frame="">0 0 -4 0 0 0</pose>
 	</model>
        
-	
 
         <model name="aws_robomaker_warehouse_Bucket_01_020">
         <include>
@@ -117,12 +89,6 @@
         <pose frame="">0.433449 9.631706 0 0 0 -1.563161</pose>
 	</model>
 
-        <!-- <model name="aws_robomaker_warehouse_Bucket_01_021">
-        <include>
-            <uri>model://aws_robomaker_warehouse_Bucket_01</uri>
-        </include>
-        <pose frame="">-1.8321 -6.3752 0 0 0 -1.563161</pose>
-	</model> -->
 
         <model name="aws_robomaker_warehouse_Bucket_01_022">
         <include>
@@ -144,13 +110,6 @@
         </include>
         <pose frame=''>3.408638 8.616844 -0.017477 0 0 0</pose>
 	</model>
-
-      <!-- <model name='aws_robomaker_warehouse_ClutteringA_01_018'>
-        <include>
-            <uri>model://aws_robomaker_warehouse_ClutteringA_01</uri>
-        </include>
-        <pose frame=''>-1.491287 5.222435 -0.017477 0 0 -1.583185</pose>
-	</model> -->
 
 
      <model name="aws_robomaker_warehouse_ClutteringC_01_027">
@@ -181,26 +140,12 @@
         <pose frame="">3.236 6.137154 0 0 0 3.150000</pose>
 	</model>
 
-     <!-- <model name="aws_robomaker_warehouse_ClutteringC_01_031">
-        <include>
-            <uri>model://aws_robomaker_warehouse_ClutteringC_01</uri>
-        </include>
-        <pose frame="">-1.573677 2.301994 -0.015663 0 0 -3.133191</pose>
-	</model> -->
-
      <model name="aws_robomaker_warehouse_ClutteringC_01_032">
         <include>
             <uri>model://aws_robomaker_warehouse_ClutteringC_01</uri>
         </include>
         <pose frame="">-1.2196 9.407 -0.015663 0 0 1.563871</pose>
-	</model>
-
-     <!-- <model name='aws_robomaker_warehouse_ClutteringD_01_005'>
-        <include>
-            <uri>model://aws_robomaker_warehouse_ClutteringD_01</uri>
-        </include>
-        <pose frame=''>-1.634682 -7.811813 -0.319559 0 0 0</pose>
-	</model> -->
+	</model> 
                                                  
       <model name='aws_robomaker_warehouse_TrashCanC_01_002'>
         <include>
