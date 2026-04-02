@@ -1,0 +1,29 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    omni_base_controller:
+      type: omni_wheel_controller/OmniWheelController
+
+    # 1. You MUST define the type here under controller_manager
+    arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+# 2. Then you define the specific joints for that controller
+arm_controller:
+  ros__parameters:
+    joints:
+      - ur5_shoulder_pan_joint
+      - ur5_shoulder_lift_joint
+      - ur5_elbow_joint
+      - ur5_wrist_1_joint
+      - ur5_wrist_2_joint
+      - ur5_wrist_3_joint
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity

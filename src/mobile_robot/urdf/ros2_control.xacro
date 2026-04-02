@@ -9,11 +9,19 @@
     <joint name="mobile_base_Revolute_2"><command_interface name="effort"><param name="min">-10</param><param name="max">10</param></command_interface><state_interface name="position"/><state_interface name="velocity"/></joint>
     <joint name="mobile_base_Revolute_3"><command_interface name="effort"><param name="min">-10</param><param name="max">10</param></command_interface><state_interface name="position"/><state_interface name="velocity"/></joint>
     <joint name="mobile_base_Revolute_4"><command_interface name="effort"><param name="min">-10</param><param name="max">10</param></command_interface><state_interface name="position"/><state_interface name="velocity"/></joint>
+
+    <joint name="ur5_shoulder_pan_joint"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
+    <joint name="ur5_shoulder_lift_joint"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
+    <joint name="ur5_elbow_joint"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
+    <joint name="ur5_wrist_1_joint"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
+    <joint name="ur5_wrist_2_joint"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
+    <joint name="ur5_wrist_3_joint"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
+
   </ros2_control>
 
   <gazebo>
     <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
-      <parameters>$(find mobile_robot)/config/my_controller.yaml</parameters>
+      <parameters>$(find mobile_robot)/config/mobile_controller.yaml</parameters>
     </plugin>
   </gazebo>
 </robot>

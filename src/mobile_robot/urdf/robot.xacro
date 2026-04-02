@@ -117,7 +117,7 @@
     </collision>
   </link>
   <joint name="camera_joint" type="fixed">
-    <origin xyz="0.474 0.0 0.1355" rpy="-3.14159 -1.57079 0"/>
+    <origin xyz="0.474 0.0 0.1355" rpy="0 0 0"/>
     <parent link="base_link"/><child link="realsense"/>
   </joint>
 
@@ -133,7 +133,7 @@
   </gazebo>
 
   <gazebo reference="omni_wheel_1">
-    <mu1>1.5</mu1>
+    <mu1>2.0</mu1>
     <mu2>0.01</mu2> 
     <fdir1>1 0 0</fdir1> 
     <kp>1000000.0</kp>
@@ -141,7 +141,7 @@
   </gazebo>
   
   <gazebo reference="omni_wheel_2">
-    <mu1>1.5</mu1>
+    <mu1>2.0</mu1>
     <mu2>0.01</mu2>
     <fdir1>1 0 0</fdir1>
     <kp>1000000.0</kp>
@@ -149,7 +149,7 @@
   </gazebo>
 
   <gazebo reference="omni_wheel_3">
-    <mu1>1.5</mu1>
+    <mu1>2.0</mu1>
     <mu2>0.01</mu2>
     <fdir1>1 0 0</fdir1>
     <kp>1000000.0</kp>
@@ -157,7 +157,7 @@
   </gazebo>
 
   <gazebo reference="omni_wheel_4">
-    <mu1>1.5</mu1>
+    <mu1>2.0</mu1>
     <mu2>0.01</mu2>
     <fdir1>1 0 0</fdir1>
     <kp>1000000.0</kp>

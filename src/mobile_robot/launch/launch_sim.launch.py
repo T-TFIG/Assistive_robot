@@ -65,7 +65,13 @@ def generate_launch_description():
     bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
-        arguments=['/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'],
+        arguments=[
+            '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
+            '/camera/image@sensor_msgs/msg/Image[gz.msgs.Image',
+            '/camera/depth_image@sensor_msgs/msg/Image[gz.msgs.Image',
+            '/camera/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked',
+            '/camera/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo'
+        ],
         output='screen'
     )
 
@@ -86,6 +92,18 @@ def generate_launch_description():
         ]
     )
 
+    arm_controller_spawner = TimerAction(
+        period=9.0, 
+        actions=[
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                arguments=["arm_controller"],
+                output='screen'
+            )
+        ]
+    )
+
     return LaunchDescription([
         declare_use_sim_time,
         set_ign_resource_path,
@@ -96,4 +114,5 @@ def generate_launch_description():
         spawn_robot,
         joint_state_broadcaster,
         omni_drive,
+        arm_controller_spawner,
     ])

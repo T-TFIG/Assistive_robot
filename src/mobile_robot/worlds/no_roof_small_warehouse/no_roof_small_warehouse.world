@@ -154,7 +154,6 @@
         <pose frame=''>-1.592441 7.715420 0 0 0 0</pose>
 	</model>
 
-
       <model name='aws_robomaker_warehouse_PalletJackB_01_001'>
         <include>
             <uri>model://aws_robomaker_warehouse_PalletJackB_01</uri>
