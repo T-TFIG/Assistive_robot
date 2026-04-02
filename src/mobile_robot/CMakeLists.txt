@@ -50,7 +50,6 @@ install(
     meshes
     launch
     config
-    maps
     worlds
     models
   DESTINATION share/${PROJECT_NAME}

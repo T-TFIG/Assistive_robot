@@ -24,4 +24,6 @@
       <parameters>$(find mobile_robot)/config/mobile_controller.yaml</parameters>
     </plugin>
   </gazebo>
+
+  
 </robot>

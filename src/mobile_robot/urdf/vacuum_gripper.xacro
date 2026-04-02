@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <link name="vacuum_gripper">
+        <visual>
+        <origin xyz="0 0 0.025" rpy="0 0 0"/>
+        <geometry><cylinder radius="0.04" length="0.05"/></geometry>
+        <material name="dark_grey"><color rgba="0.2 0.2 0.2 1"/></material>
+        </visual>
+        <collision>
+        <origin xyz="0 0 0.025" rpy="0 0 0"/>
+        <geometry><cylinder radius="0.04" length="0.05"/></geometry>
+        </collision>
+    </link>
+
+    <joint name="gripper_joint" type="fixed">
+        <parent link="ur5_tool0"/>
+        <child link="vacuum_gripper"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <xacro:realsense_sensor name="wrist_camera" topics_ns="wrist_cam" parent_link="ur5_tool0">
+        <origin xyz="0.06 0 0.02" rpy="0 0 0"/> 
+    </xacro:realsense_sensor>
+
+</robot>

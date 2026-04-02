@@ -161,6 +161,11 @@
         <pose frame=''>-0.276098 -9.481944 0.023266 0 0 0</pose>
 	</model>
 
+    <model name='box_1'>
+        <include><uri>model://aruco_box</uri></include>
+        <pose>2.5 0.5 0.1 0 0 0.5</pose>
+    </model>
+
     	
     <light name="Warehouse_CeilingLight_003" type="point">
       <pose frame="">0 0 9 0 0 0</pose>

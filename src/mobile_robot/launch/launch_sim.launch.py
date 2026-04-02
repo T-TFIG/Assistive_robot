@@ -9,26 +9,24 @@ from ament_index_python.packages import get_package_share_directory
 def generate_launch_description():
     pkg_path = get_package_share_directory('mobile_robot')
     
-    # Define the models path clearly
-    # This points to: install/mobile_robot/share/mobile_robot/models
     models_path = os.path.join(pkg_path, 'models')
     
-    # We also need the share directory itself so Gazebo can resolve package:// URIs
     pkg_share_path = os.path.abspath(os.path.join(pkg_path, '..'))
 
-    # Combine them into a single string
-    full_resource_path = models_path + ':' + pkg_share_path
+    full_resource_path = models_path + ':' + pkg_share_path + ':' + pkg_path
 
     # Set both variable names to be safe across different versions of Gazebo Sim/Ignition
+
+    set_gz_resource_path = SetEnvironmentVariable(
+        name='GZ_SIM_RESOURCE_PATH',
+        value=full_resource_path
+    )
+
     set_ign_resource_path = SetEnvironmentVariable(
         name='IGN_GAZEBO_RESOURCE_PATH',
         value=full_resource_path
     )
     
-    set_gz_resource_path = SetEnvironmentVariable(
-        name='GZ_SIM_RESOURCE_PATH',
-        value=full_resource_path
-    )
 
     use_sim_time = LaunchConfiguration('use_sim_time')
     declare_use_sim_time = DeclareLaunchArgument('use_sim_time', default_value='true')
@@ -67,10 +65,16 @@ def generate_launch_description():
         executable='parameter_bridge',
         arguments=[
             '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
-            '/camera/image@sensor_msgs/msg/Image[gz.msgs.Image',
-            '/camera/depth_image@sensor_msgs/msg/Image[gz.msgs.Image',
-            '/camera/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked',
-            '/camera/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo'
+            # base Cam
+            '/base_cam/image@sensor_msgs/msg/Image[gz.msgs.Image',
+            '/base_cam/depth_image@sensor_msgs/msg/Image[gz.msgs.Image',
+            '/base_cam/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked',
+            '/base_cam/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo',
+            # Wrist Cam
+            '/wrist_cam/image@sensor_msgs/msg/Image[gz.msgs.Image',
+            '/wrist_cam/depth_image@sensor_msgs/msg/Image[gz.msgs.Image',
+            '/wrist_cam/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked',
+            '/wrist_cam/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo'
         ],
         output='screen'
     )
