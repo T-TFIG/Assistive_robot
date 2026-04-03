@@ -57,7 +57,6 @@ controller_interface::InterfaceConfiguration PidController::command_interface_co
     controller_interface::InterfaceConfiguration config;
     config.type = controller_interface::interface_configuration_type::INDIVIDUAL;
 
-    // ⚠️ MUST match URDF joint names
     config.names = {
         "mobile_base_Revolute_1/effort",
         "mobile_base_Revolute_2/effort",
@@ -92,16 +91,20 @@ Eigen::Matrix<double, 4, 1> PidController::inverse_kinematic(const geometry_msgs
     double k = L + W;
 
     Eigen::Matrix<double, 4, 3> M;
-    M <<  1, -1, -(L+W),
-          1,  1,  (L+W),
-          1,  1, -(L+W),
-          1, -1,  (L+W);
+    M <<  -(L+W), 1, -1,
+           (L+W), 1,  1,
+           (L+W), 1, -1,
+          -(L+W), 1,  1;
 
     Eigen::Matrix<double, 3, 1> v;
 
-    v << -cmd.angular.z,
-         -cmd.linear.y,
-         -cmd.linear.x;
+    std::cout << "cmd_vel command" << std::endl;
+    std::cout << cmd.linear.x << std::endl;
+    std::cout << cmd.angular.z << std::endl;
+
+    v << cmd.angular.z,
+         cmd.linear.x,
+         cmd.linear.y;
 
     return (1.0 / r) * M * v;
 }
@@ -115,10 +118,10 @@ Eigen::Matrix<double, 3, 1> PidController::forward_kinematic()
     double k = L + W;
 
     Eigen::Matrix<double, 4, 3> M;
-    M <<  1, -1, -(L+W),
-          1,  1,  (L+W),
-          1,  1, -(L+W),
-          1, -1,  (L+W);
+    M <<  -(L+W), 1, -1,
+           (L+W), 1,  1,
+           (L+W), 1, -1,
+          -(L+W), 1,  1;
 
     Eigen::Matrix<double, 3, 4> M_pinv =
         (M.transpose() * M).inverse() * M.transpose();
@@ -166,8 +169,10 @@ controller_interface::return_type PidController::update(
     double dt = period.seconds();
     if (dt <= 0.0) return controller_interface::return_type::OK;
 
+    std::cout << "command" << std::endl;
     for (int i = 0; i < 4; i++)
     {
+        std::cout << desired(i) << std::endl;
         double current = state_interfaces_[i].get_value();
         double error = desired(i) - current;
 
@@ -189,6 +194,32 @@ controller_interface::return_type PidController::update(
     pseudo_odom_[0] += (vel(0) * cos(theta) - vel(1) * sin(theta)) * dt;
     pseudo_odom_[1] += (vel(0) * sin(theta) + vel(1) * cos(theta)) * dt;
     pseudo_odom_[2] += vel(2) * dt;
+
+    auto odom_msg = std::make_unique<nav_msgs::msg::Odometry>();
+    odom_msg->header.stamp = time;
+    odom_msg->header.frame_id = "odom";
+    odom_msg->child_frame_id = "base_link";
+
+    // Set the position
+    odom_msg->pose.pose.position.x = pseudo_odom_[0];
+    odom_msg->pose.pose.position.y = pseudo_odom_[1];
+    odom_msg->pose.pose.position.z = 0.0;
+
+    // Convert Euler Theta to Quaternion
+    tf2::Quaternion q;
+    q.setRPY(0, 0, pseudo_odom_[2]);
+    odom_msg->pose.pose.orientation.x = q.x();
+    odom_msg->pose.pose.orientation.y = q.y();
+    odom_msg->pose.pose.orientation.z = q.z();
+    odom_msg->pose.pose.orientation.w = q.w();
+
+    // Set the velocity
+    odom_msg->twist.twist.linear.x = vel(0);
+    odom_msg->twist.twist.linear.y = vel(1);
+    odom_msg->twist.twist.angular.z = vel(2);
+
+    // Finally, publish
+    odom_pub_->publish(std::move(odom_msg));
 
     return controller_interface::return_type::OK;
 }

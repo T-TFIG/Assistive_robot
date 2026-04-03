@@ -20,7 +20,7 @@
     </joint>
 
     <xacro:realsense_sensor name="wrist_camera" topics_ns="wrist_cam" parent_link="ur5_tool0">
-        <origin xyz="0.06 0 0.02" rpy="0 0 0"/> 
+        <origin xyz="0.06 0 0.02" rpy="0 -1.57079 0"/> 
     </xacro:realsense_sensor>
 
 </robot>
