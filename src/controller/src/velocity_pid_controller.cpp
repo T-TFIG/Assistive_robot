@@ -49,6 +49,7 @@ controller_interface::CallbackReturn PidController::on_configure(const rclcpp_li
 
 controller_interface::CallbackReturn PidController::on_activate(const rclcpp_lifecycle::State &)
 {
+    std::fill(pseudo_odom_.begin(), pseudo_odom_.end(), 0.0);
     return CallbackReturn::SUCCESS;
 }
 
@@ -97,10 +98,6 @@ Eigen::Matrix<double, 4, 1> PidController::inverse_kinematic(const geometry_msgs
           -(L+W), 1,  1;
 
     Eigen::Matrix<double, 3, 1> v;
-
-    std::cout << "cmd_vel command" << std::endl;
-    std::cout << cmd.linear.x << std::endl;
-    std::cout << cmd.angular.z << std::endl;
 
     v << cmd.angular.z,
          cmd.linear.x,
@@ -168,13 +165,11 @@ controller_interface::return_type PidController::update(
 
     double dt = period.seconds();
     if (dt <= 0.0) return controller_interface::return_type::OK;
-
-    std::cout << "command" << std::endl;
     for (int i = 0; i < 4; i++)
     {
-        std::cout << desired(i) << std::endl;
         double current = state_interfaces_[i].get_value();
         double error = desired(i) - current;
+        
 
         double effort = compute_pid_command(error, dt, i);
 
@@ -189,11 +184,15 @@ controller_interface::return_type PidController::update(
     // odometry
     auto vel = forward_kinematic();
 
-    double theta = pseudo_odom_[2];
+    double theta_old = pseudo_odom_[2];
+    double delta_theta = vel(0) * dt;
+    double theta_mid = theta_old + (delta_theta / 2.0); 
 
-    pseudo_odom_[0] += (vel(0) * cos(theta) - vel(1) * sin(theta)) * dt;
-    pseudo_odom_[1] += (vel(0) * sin(theta) + vel(1) * cos(theta)) * dt;
-    pseudo_odom_[2] += vel(2) * dt;
+    pseudo_odom_[0] += (vel(1) * cos(theta_mid) - vel(2) * sin(theta_mid)) * dt;
+    pseudo_odom_[1] += (vel(1) * sin(theta_mid) + vel(2) * cos(theta_mid)) * dt;
+    pseudo_odom_[2] += delta_theta;
+
+    std::cout << pseudo_odom_[2] << std::endl;
 
     auto odom_msg = std::make_unique<nav_msgs::msg::Odometry>();
     odom_msg->header.stamp = time;
@@ -214,9 +213,9 @@ controller_interface::return_type PidController::update(
     odom_msg->pose.pose.orientation.w = q.w();
 
     // Set the velocity
-    odom_msg->twist.twist.linear.x = vel(0);
-    odom_msg->twist.twist.linear.y = vel(1);
-    odom_msg->twist.twist.angular.z = vel(2);
+    odom_msg->twist.twist.linear.x = vel(1);
+    odom_msg->twist.twist.linear.y = vel(2);
+    odom_msg->twist.twist.angular.z = vel(0);
 
     // Finally, publish
     odom_pub_->publish(std::move(odom_msg));

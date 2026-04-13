@@ -3,7 +3,7 @@
 
   <xacro:include filename="realsense_sensor.xacro"/>
 
-  <xacro:include filename="robot.xacro"/>
+  <xacro:include filename="robot2.xacro"/>
   
   <xacro:include filename="ros2_control.xacro"/>
 

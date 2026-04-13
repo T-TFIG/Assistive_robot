@@ -1,0 +1,2465 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="4_wheel_mobile_assem" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+     <link name="base_footprint"/>
+
+    <joint name="base_joint" type="fixed">
+        <parent link="base_footprint"/>
+        <child link="base_link"/>
+    </joint>
+
+    <link name="base_link">
+        <inertial>
+            <origin xyz="0.006289254653601762 -7.410141095030503e-17 0.09389991426726514" rpy="0.0 0.0 0.0" />
+            <mass value="7.00" />
+            <inertia ixx="4.0" iyy="8.72249646916854" izz="12.181580226716167" ixy="-3.045924999660884e-13" iyz="1.1010920324364646e-13" ixz="-0.6156657094329935" />
+        </inertial>
+        <visual name="base_link_visual">
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/base_link.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="base_blue">
+                <color rgba="0.0 0.2 0.6 1.0"/>
+            </material>
+        </visual>
+        <collision name="base_link_collision">
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/base_link.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
+    </link>
+
+    <gazebo reference="base_link">
+        <material>
+            <ambient>0.0 0.2 0.6 1</ambient>
+            <diffuse>0.0 0.3 0.7 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+        </material>
+    </gazebo>
+
+    <link name="Realsense_D455">
+        <inertial>
+            <origin xyz="6.359106729602714e-05 -0.0001583183035289228 0.013103406900131134" rpy="0.0 -0.0 0.0" />
+            <mass value="0.4224343307990776" />
+            <inertia ixx="0.0005263815553470524" iyy="4.808114888894821e-05" izz="0.0005349726197919043" ixy="-3.4306312466689594e-07" iyz="3.9088259249671483e-07" ixz="2.188450578845258e-07" />
+        </inertial>
+        <visual name="Realsense_D455_visual">
+            <origin xyz="-4.5257177916369075e-09 1.5070762415803906e-11 0.025999999999999943" rpy="0.0 -0.0 -1.5707963267948968" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/Realsense_D455.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="realsense_blue">
+                <color rgba="0.3 0.7 1.0 1.0"/>
+            </material>
+        </visual>
+        <collision name="Realsense_D455_collision">
+            <origin xyz="-4.5257177916369075e-09 1.5070762415803906e-11 0.025999999999999943" rpy="0.0 -0.0 -1.5707963267948968" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/Realsense_D455.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
+    </link>
+
+    <gazebo reference="Realsense_D455">
+        <material>
+            <ambient>0.3 0.7 1.0 1</ambient>
+            <diffuse>0.4 0.8 1.0 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <link name="Wheel_1_1">
+        <inertial>
+            <origin xyz="-2.2854070824108096e-08 -0.005000019047082058 -2.9233610266593033e-08" rpy="0.0 0.0 0.0" />
+            <mass value="1.0" />
+            <inertia ixx="1.644821276526904e-05" iyy="3.131925708343622e-05" izz="1.6448192668605417e-05" ixy="-9.723840189786297e-12" iyz="-1.6779767246669715e-11" ixz="2.3406438242554997e-12" />
+        </inertial>
+        <visual name="Wheel_1_1_visual">
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/Wheel_Component.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="wheel_black">
+                <color rgba="0.1 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <!-- <collision name="Wheel_1_1_collision">
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <cylinder radius="0.0265" length="0.01"/> 
+            </geometry>
+        </collision> -->
+    </link>
+    <link name="Slip_Wheel_1_1_1">
+        <inertial>
+            <origin xyz="0.0056450395097036934 3.197442310920451e-15 -0.008254301512689004" rpy="0.0 5.551115123125784e-17 5.473822126268818e-48" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="4.4429528043884005e-07" iyy="5.29755392819891e-07" izz="3.470333813091368e-07" ixy="6.701955006207128e-38" iyz="6.004138797646522e-38" ixz="1.2496176875774803e-07" />
+        </inertial>
+        <visual name="Slip_Wheel_1_1_1_visual">
+            <origin xyz="0.034597830824969124 -1.4210854715202004e-16 -0.050589747961378606" rpy="3.1415926535897913 -0.9709644209993624 -3.141592653589791" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_1_1_1_collision">
+            <origin xyz="0.034597830824969124 -1.4210854715202004e-16 -0.050589747961378606" rpy="3.1415926535897913 -0.9709644209993624 -3.141592653589791" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+
+    <link name="Slip_Wheel_1_1_2">
+        <inertial>
+            <origin xyz="-0.005645038338365596 3.481659405224491e-15 -0.008254305331833365" rpy="0.0 -0.0 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="4.4429528043947453e-07" iyy="5.297553928190236e-07" izz="3.4703338130936956e-07" ixy="2.710505431213761e-20" iyz="4.2321309410096477e-38" ixz="-1.2496176875759885e-07" />
+        </inertial>
+        <visual name="Slip_Wheel_1_1_2_visual">
+            <origin xyz="0.02330775297689984 1.4210854715202004e-16 0.03408114111685628" rpy="-3.141592653589791 0.9709644209993631 -3.141592653589792" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_1_1_2_collision">
+            <origin xyz="0.02330775297689984 1.4210854715202004e-16 0.03408114111685628" rpy="-3.141592653589791 0.9709644209993631 -3.141592653589792" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+            
+        </collision>
+    </link>
+    <link name="Slip_Wheel_1_1_3">
+        <inertial>
+            <origin xyz="-0.005645040689196748 -3.197442310920451e-15 -0.008254301719815107" rpy="0.0 -0.0 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="4.4429528043891067e-07" iyy="5.297553928194573e-07" izz="3.4703338130906606e-07" ixy="-4.996579746636155e-38" iyz="8.619739564015862e-38" ixz="-1.2496176875746105e-07" />
+        </inertial>
+        <visual name="Slip_Wheel_1_1_3_visual">
+            <origin xyz="-0.03459783200446225 2.1316282072803005e-16 -0.05058974816850476" rpy="3.141592653589793 -0.9709644209993623 -1.4950216058305377e-15" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_1_1_3_collision">
+            <origin xyz="-0.03459783200446225 2.1316282072803005e-16 -0.05058974816850476" rpy="3.141592653589793 -0.9709644209993623 -1.4950216058305377e-15" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+    <link name="Slip_Wheel_1_1_4">
+        <inertial>
+            <origin xyz="-0.005645037246545144 3.765876499528531e-15 -0.008254308306748897" rpy="0.0 -0.0 1.0947644252537633e-47" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="4.4429528043873697e-07" iyy="5.297553928194573e-07" izz="3.470333813088063e-07" ixy="-5.847411244487996e-38" iyz="1.0951610837334318e-38" ixz="-1.2496176875718574e-07" />
+        </inertial>
+        <visual name="Slip_Wheel_1_1_4_visual">
+            <origin xyz="0.023307754068720356 2.842170943040401e-16 0.03408113814194089" rpy="3.141592653589791 0.9709644209993639 3.141592653589791" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_1_1_4_collision">
+            <origin xyz="0.023307754068720356 2.842170943040401e-16 0.03408113814194089" rpy="3.141592653589791 0.9709644209993639 3.141592653589791" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+    <link name="Slip_Wheel_1_1_5">
+        <inertial>
+            <origin xyz="0.005645038676244489 3.268496584496461e-15 -0.008254311531302997" rpy="0.0 -0.0 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="4.442952804384889e-07" iyy="5.297553928194573e-07" izz="3.4703338130862046e-07" ixy="1.3826808513463367e-38" iyz="7.942892791109909e-38" ixz="1.249617687578059e-07" />
+        </inertial>
+        <visual name="Slip_Wheel_1_1_5_visual">
+            <origin xyz="0.03459782999150999 -1.4210854715202004e-16 -0.050589757979992704" rpy="-3.141592653589792 -0.9709644209993623 3.141592653589793" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_1_1_5_collision">
+            <origin xyz="0.03459782999150999 -1.4210854715202004e-16 -0.050589757979992704" rpy="-3.141592653589792 -0.9709644209993623 3.141592653589793" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+
+    <!-- COLOR -->
+
+    <gazebo reference="Wheel_1_1">
+        <material>
+            <ambient>0.05 0.05 0.05 1</ambient>
+            <diffuse>0.1 0.1 0.1 1</diffuse>
+            <specular>0.01 0.01 0.01 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_1_1_1">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_1_1_2">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_1_1_3">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_1_1_4">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_1_1_5">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <link name="Wheel_1_2">
+        <inertial>
+            <origin xyz="-2.3677452887227446e-08 2.8570802361738147e-08 0.006249980952917938" rpy="0.0 -0.0 0.0" />
+            <mass value="1.0" />
+            <inertia ixx="1.6448212882250526e-05" iyy="1.644819255163313e-05" izz="3.1319257083439744e-05" ixy="-1.764669682081943e-12" iyz="1.64959961922867e-11" ixz="-1.0197828692604105e-11" />
+        </inertial>
+        <visual name="Wheel_1_2_visual">
+            <origin xyz="-7.105427357601002e-17 -3.9968028886505634e-17 0.01125" rpy="1.5707963267948992 -1.4527271825005583e-15 0.028486624922421003" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/Wheel_Component.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="wheel_black">
+                <color rgba="0.1 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <!-- <collision name="Wheel_1_2_collision">
+            <origin xyz="0.0 0.0 0.0" rpy="1.57 0.0 0.0" />
+            <geometry>
+                <cylinder radius="0.0265" length="0.01"/> 
+            </geometry>
+        </collision> -->
+    </link>
+    <link name="Slip_Wheel_1_2_1">
+        <inertial>
+            <origin xyz="-0.0002848229673811886 -3.126388037344441e-15 -0.009995942033730838" rpy="0.0 5.551115123125784e-17 2.189528850507527e-47" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="5.295378252072116e-07" iyy="5.2975539281859e-07" izz="2.61790836541199e-07" ixy="3.35036896636259e-20" iyz="1.0311375411237011e-19" ixz="-7.63547128408449e-09" />
+        </inertial>
+        <visual name="Slip_Wheel_1_2_1_visual">
+            <origin xyz="0.0011760278957352456 4.263256414560601e-16 0.04127217735552453" rpy="-6.064698518096112e-15 1.5423097018724712 -3.1415926535896896" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_1_2_1_collision">
+            <origin xyz="0.0011760278957352456 4.263256414560601e-16 0.04127217735552453" rpy="-6.064698518096112e-15 1.5423097018724712 -3.1415926535896896" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+    <link name="Slip_Wheel_1_2_2">
+        <inertial>
+            <origin xyz="0.0002848296242471271 -3.481659405224491e-15 -0.00999594533912898" rpy="0.0 -0.0 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="5.295378252070937e-07" iyy="5.297553928190236e-07" izz="2.617908365413167e-07" ixy="1.3552527156068805e-19" iyz="4.502051696146751e-37" ixz="7.635471284482121e-09" />
+        </inertial>
+        <visual name="Slip_Wheel_1_2_2_visual">
+            <origin xyz="0.0017456804873633835 0.0 -0.06126406472838461" rpy="-2.680268522504323e-14 -1.542309701872475 -3.141592653589742" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_1_2_2_collision">
+            <origin xyz="0.0017456804873633835 0.0 -0.06126406472838461" rpy="-2.680268522504323e-14 -1.542309701872475 -3.141592653589742" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+    <link name="Slip_Wheel_1_2_3">
+        <inertial>
+            <origin xyz="0.0002848303629426141 3.268496584496461e-15 -0.009995948788210179" rpy="0.0 -0.0 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="5.295378252069613e-07" iyy="5.2975539281859e-07" izz="2.6179083654144906e-07" ixy="4.1879612079532336e-20" iyz="1.2889219264046264e-19" ixz="7.635471284022181e-09" />
+        </inertial>
+        <visual name="Slip_Wheel_1_2_3_visual">
+            <origin xyz="-0.0011760205001739622 0.0 0.04127217060104552" rpy="2.275213365685726e-14 1.5423097018724696 -7.207220961220932e-14" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_1_2_3_collision">
+            <origin xyz="-0.0011760205001739622 0.0 0.04127217060104552" rpy="2.275213365685726e-14 1.5423097018724696 -7.207220961220932e-14" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+    <link name="Slip_Wheel_1_2_4">
+        <inertial>
+            <origin xyz="0.0002848237998671266 -3.765876499528531e-15 -0.009995941172871916" rpy="0.0 -0.0 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="5.295378252073764e-07" iyy="5.297553928194573e-07" izz="2.6179083654103423e-07" ixy="-9.867802307388877e-20" iyz="7.169378034267447e-20" ixz="7.635471284274967e-09" />
+        </inertial>
+        <visual name="Slip_Wheel_1_2_4_visual">
+            <origin xyz="0.0017456746629834542 -4.973799150320702e-16 -0.061264060562127264" rpy="1.2741093308528656e-14 -1.5423097018724738 3.1415926535896976" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_1_2_4_collision">
+            <origin xyz="0.0017456746629834542 -4.973799150320702e-16 -0.061264060562127264" rpy="1.2741093308528656e-14 -1.5423097018724738 3.1415926535896976" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+    <link name="Slip_Wheel_1_2_5">
+        <inertial>
+            <origin xyz="-0.00028482699233453704 -3.268496584496461e-15 -0.009995943574128249" rpy="0.0 -0.0 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="5.295378252069874e-07" iyy="5.2975539281859e-07" izz="2.617908365418567e-07" ixy="1.534921397257903e-19" iyz="4.245404673926865e-19" ixz="-7.635471284314248e-09" />
+        </inertial>
+        <visual name="Slip_Wheel_1_2_5_visual">
+            <origin xyz="0.0011760238707818971 1.4210854715202004e-16 0.041272175815127564" rpy="-3.050409769544389e-14 1.5423097018724712 -3.1415926535897802" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_1_2_5_collision">
+            <origin xyz="0.0011760238707818971 1.4210854715202004e-16 0.041272175815127564" rpy="-3.050409769544389e-14 1.5423097018724712 -3.1415926535897802" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+
+    <gazebo reference="Wheel_1_2">
+        <material>
+            <ambient>0.05 0.05 0.05 1</ambient>
+            <diffuse>0.1 0.1 0.1 1</diffuse>
+            <specular>0.01 0.01 0.01 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_1_2_1">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_1_2_2">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_1_2_3">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_1_2_4">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_1_2_5">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <!-- Wheel 2 (1)-->
+
+    <link name="Wheel_2_1">
+        <inertial>
+            <origin xyz="-2.2854070849120986e-08 -0.005000019047082063 -2.923361025919396e-08" rpy="0.0 0.0 0.0" />
+            <mass value="1.0" />
+            <inertia ixx="1.6448212765271244e-05" iyy="3.1319257083436275e-05" izz="1.6448192668609063e-05" ixy="-9.723844993092552e-12" iyz="-1.6779765727933966e-11" ixz="2.3406436285248707e-12" />
+        </inertial>
+        <visual name="Wheel_2_1_visual">
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/Wheel_Component.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="wheel_black">
+                <color rgba="0.1 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <!-- <collision name="Wheel_2_1_collision">
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <cylinder radius="0.0275" length="0.025"/> 
+            </geometry>
+        </collision> -->
+    </link>
+    <link name="Slip_Wheel_2_1_1">
+        <inertial>
+            <origin xyz="-4.822367611900802e-09 3.339550858072471e-15 -0.010000000000001563" rpy="0.0 -0.0 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="5.297553928680296e-07" iyy="5.297553928181563e-07" izz="2.615732688803808e-07" ixy="2.710505431213761e-20" iyz="4.336808689942018e-19" ixz="0.0" />
+        </inertial>
+        <visual name="Slip_Wheel_2_1_1_visual">
+            <origin xyz="-4.82236760745991e-09 -7.105427357601002e-17 0.041288928151746944" rpy="-0.0 1.5707963267948966 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_2_1_1_collision">
+            <origin xyz="-4.82236760745991e-09 -7.105427357601002e-17 0.041288928151746944" rpy="-0.0 1.5707963267948966 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+    <link name="Slip_Wheel_2_1_2">
+        <inertial>
+            <origin xyz="3.637721448512821e-09 -3.4106051316484808e-15 -0.009999999987821636" rpy="0.0 5.551115123125784e-17 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="5.297553928681826e-07" iyy="5.297553928190236e-07" izz="2.615732688802281e-07" ixy="-8.375922415906475e-21" iyz="-2.5778438528092528e-20" ixz="-1.6877131474041934e-19" />
+        </inertial>
+        <visual name="Slip_Wheel_2_1_2_visual">
+            <origin xyz="3.637721448512821e-09 0.0 0.041288928163926875" rpy="-3.141592653589793 1.5707963267948966 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_2_1_2_collision">
+            <origin xyz="3.637721448512821e-09 0.0 0.041288928163926875" rpy="-3.141592653589793 1.5707963267948966 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+    <link name="Slip_Wheel_2_1_3">
+        <inertial>
+            <origin xyz="-4.173885699287894e-09 3.552713678800501e-15 -0.009999998703186748" rpy="0.0 -0.0 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="5.297553928677036e-07" iyy="5.2975539281859e-07" izz="2.6157326887983946e-07" ixy="-2.5491121899617593e-19" iyz="-3.508551931516044e-19" ixz="-3.1334925092488773e-19" />
+        </inertial>
+        <visual name="Slip_Wheel_2_1_3_visual">
+            <origin xyz="-4.173885699287894e-09 1.4210854715202004e-16 -0.06128892685493522" rpy="-1.224646799147367e-16 -1.5707963267948966 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_2_1_3_collision">
+            <origin xyz="-4.173885699287894e-09 1.4210854715202004e-16 -0.06128892685493522" rpy="-1.224646799147367e-16 -1.5707963267948966 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+    <link name="Slip_Wheel_2_1_4">
+        <inertial>
+            <origin xyz="2.5581492479886948e-11 3.4106051316484808e-15 -0.009999998421952263" rpy="0.0 -0.0 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="5.297553928678439e-07" iyy="5.2975539281859e-07" izz="2.6157326888013306e-07" ixy="-2.7410561964969102e-21" iyz="1.991493898407624e-21" ixz="-1.1022016226146583e-19" />
+        </inertial>
+        <visual name="Slip_Wheel_2_1_4_visual">
+            <origin xyz="2.5581492479886948e-11 0.0 0.041288929729796246" rpy="-1.5777218104420233e-30 1.5707963267948966 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_2_1_4_collision">
+            <origin xyz="2.5581492479886948e-11 0.0 0.041288929729796246" rpy="-1.5777218104420233e-30 1.5707963267948966 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+    <link name="Slip_Wheel_2_1_5">
+        <inertial>
+            <origin xyz="-3.4300166618095317e-09 -3.552713678800501e-15 -0.009999999736990796" rpy="0.0 -0.0 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="5.297553928674376e-07" iyy="5.297553928190236e-07" izz="2.615732688801054e-07" ixy="4.1245501644948045e-19" iyz="-1.3401475865450348e-19" ixz="1.410574554974427e-19" />
+        </inertial>
+        <visual name="Slip_Wheel_2_1_5_visual">
+            <origin xyz="-3.4300166618095317e-09 -1.4210854715202004e-16 -0.061288927888739304" rpy="-3.141592653589793 -1.5707963267948966 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_2_1_5_collision">
+            <origin xyz="-3.4300166618095317e-09 -1.4210854715202004e-16 -0.061288927888739304" rpy="-3.141592653589793 -1.5707963267948966 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+
+    <gazebo reference="Wheel_2_1">
+        <material>
+            <ambient>0.05 0.05 0.05 1</ambient>
+            <diffuse>0.1 0.1 0.1 1</diffuse>
+            <specular>0.01 0.01 0.01 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_2_1_1">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_2_1_2">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_2_1_3">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_2_1_4">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_2_1_5">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <!--  -->
+    <link name="Wheel_2_2">
+        <inertial>
+            <origin xyz="-2.2854070920175218e-08 -2.9233610256973465e-08 -0.006249980952917867" rpy="0.0 -0.0 0.0" />
+            <mass value="1.0" />
+            <inertia ixx="1.6448212765267714e-05" iyy="1.6448192668609002e-05" izz="3.131925708343801e-05" ixy="2.340643629437922e-12" iyz="1.6779765944774372e-11" ixz="9.723843258369058e-12" />
+        </inertial>
+        <visual name="Wheel_2_2_visual">
+            <origin xyz="0.0 0.0 -0.011249999999999928" rpy="-1.5707963267948966 -1.4210859684903108e-14 0.0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/Wheel_Component.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="wheel_black">
+                <color rgba="0.1 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <!-- <collision name="Wheel_2_2_collision">
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <cylinder radius="0.0275" length="0.025"/> 
+            </geometry>
+        </collision> -->
+    </link>
+    <link name="Slip_Wheel_2_2_1">
+        <inertial>
+            <origin xyz="0.009510563670044086 -3.765876499528531e-15 -0.003090169431776673" rpy="0.0 -0.0 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="2.871823829278942e-07" iyy="5.297553928194573e-07" izz="5.041462788209499e-07" ixy="-2.7683966856815123e-19" iyz="3.3492324196434336e-19" ixz="7.881674870469725e-08" />
+        </inertial>
+        <visual name="Slip_Wheel_2_2_1_visual">
+            <origin xyz="-0.03926810566247035 -9.947598300641404e-16 0.012758980990389262" rpy="-3.141592653589781 0.3141592653589774 1.2088479278340214e-14" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_2_2_1_collision">
+            <origin xyz="-0.03926810566247035 -9.947598300641404e-16 0.012758980990389262" rpy="-3.141592653589781 0.3141592653589774 1.2088479278340214e-14" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+    <link name="Slip_Wheel_2_2_2">
+        <inertial>
+            <origin xyz="0.00951056263980778 -4.0500935938325715e-15 -0.0030901735126136034" rpy="0.0 -0.0 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="2.8718238292784277e-07" iyy="5.2975539281859e-07" izz="5.041462788210014e-07" ixy="6.578534871592585e-20" iyz="4.779585356178297e-20" ixz="7.88167487047141e-08" />
+        </inertial>
+        <visual name="Slip_Wheel_2_2_2_visual">
+            <origin xyz="0.05828923197232221 -1.2789769243681803e-15 -0.0189393239347795" rpy="1.1966014598425498e-14 -0.31415926535897787 3.141592653589781" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_2_2_2_collision">
+            <origin xyz="0.05828923197232221 -1.2789769243681803e-15 -0.0189393239347795" rpy="1.1966014598425498e-14 -0.31415926535897787 3.141592653589781" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+    <link name="Slip_Wheel_2_2_3">
+        <inertial>
+            <origin xyz="-0.005877855458744463 3.0553337637684308e-15 0.008090167795698272" rpy="0.0 -5.551115123125783e-17 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="4.3710074782419464e-07" iyy="5.297553928192405e-07" izz="3.5422791392334857e-07" ixy="-4.1036103584550386e-19" iyz="-1.4045936828652658e-19" ixz="1.275281782865286e-07" />
+        </inertial>
+        <visual name="Slip_Wheel_2_2_3_visual">
+            <origin xyz="0.024269020114741444 -5.684341886080802e-16 -0.033403446702341986" rpy="3.141592653589786 -0.9424777960769394 3.1415926535897856" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_2_2_3_collision">
+            <origin xyz="0.024269020114741444 -5.684341886080802e-16 -0.033403446702341986" rpy="3.141592653589786 -0.9424777960769394 3.1415926535897856" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+    <link name="Slip_Wheel_2_2_4">
+        <inertial>
+            <origin xyz="4.822367758450241e-09 -3.197442310920451e-15 -0.009999999999998295" rpy="0.0 -0.0 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="5.297553928680296e-07" iyy="5.297553928194573e-07" izz="2.615732688803808e-07" ixy="-5.934731916543879e-67" iyz="-4.336808689942018e-19" ixz="6.7174489145762595e-21" />
+        </inertial>
+        <visual name="Slip_Wheel_2_2_4_visual">
+            <origin xyz="4.8223677528991265e-09 9.237055564881303e-16 -0.0612889281517468" rpy="3.141592653589793 -1.5707963267948823 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_2_2_4_collision">
+            <origin xyz="4.8223677528991265e-09 9.237055564881303e-16 -0.0612889281517468" rpy="3.141592653589793 -1.5707963267948823 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+    <link name="Slip_Wheel_2_2_5">
+        <inertial>
+            <origin xyz="-0.005877849593391389 -3.481659405224491e-15 0.008090171747085897" rpy="0.0 -5.551115123125783e-17 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="4.3710074782387716e-07" iyy="5.2975539281859e-07" izz="3.542279139240998e-07" ixy="-2.0939806039766194e-21" iyz="6.444609632023132e-21" ixz="1.2752817828615723e-07" />
+        </inertial>
+        <visual name="Slip_Wheel_2_2_5_visual">
+            <origin xyz="0.024269025980094696 1.4210854715202004e-16 -0.033403442750954346" rpy="7.471091066313086e-15 -0.9424777960769389 -3.1415926535897856" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_2_2_5_collision">
+            <origin xyz="0.024269025980094696 1.4210854715202004e-16 -0.033403442750954346" rpy="7.471091066313086e-15 -0.9424777960769389 -3.1415926535897856" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+
+    <gazebo reference="Wheel_2_2">
+        <material>
+            <ambient>0.05 0.05 0.05 1</ambient>
+            <diffuse>0.1 0.1 0.1 1</diffuse>
+            <specular>0.01 0.01 0.01 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_2_2_1">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_2_2_2">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_2_2_3">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_2_2_4">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_2_2_5">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <!-- Wheel 3 -->
+
+    <link name="Wheel_3_1">
+        <inertial>
+            <origin xyz="-2.2854070837624486e-08 -0.00500001904708205 -2.9233610261204318e-08" rpy="0.0 0.0 0.0" />
+            <mass value="1.0" />
+            <inertia ixx="1.644821276527174e-05" iyy="3.131925708343264e-05" izz="1.644819266860671e-05" ixy="-9.723841607438461e-12" iyz="-1.6779766428976263e-11" ixz="2.340642162376857e-12" />
+        </inertial>
+        <visual name="Wheel_3_1_visual">
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/Wheel_Component.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="wheel_black">
+                <color rgba="0.1 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <!-- <collision name="Wheel_3_1_collision">
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <cylinder radius="0.0275" length="0.025"/> 
+            </geometry>
+        </collision> -->
+    </link>
+    <link name="Slip_Wheel_3_1_1">
+        <inertial>
+            <origin xyz="0.0058778564243026216 -4.192202140984591e-15 -0.008090167109233982" rpy="0.0 -0.0 -2.627434620609032e-46" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="4.371007478235397e-07" iyy="5.2975539281859e-07" izz="3.5422791392400343e-07" ixy="4.624417902896919e-37" iyz="7.448307234704756e-38" ixz="1.2752817828574327e-07" />
+        </inertial>
+        <visual name="Slip_Wheel_3_1_1_visual">
+            <origin xyz="-0.024269019149183394 -2.1316282072803005e-16 0.03340344738880628" rpy="3.141592653589769 0.9424777960769385 -1.95595703446531e-14" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_3_1_1_collision">
+            <origin xyz="-0.024269019149183394 -2.1316282072803005e-16 0.03340344738880628" rpy="3.141592653589769 0.9424777960769385 -1.95595703446531e-14" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+    <link name="Slip_Wheel_3_1_2">
+        <inertial>
+            <origin xyz="0.009510566275484713 -2.9842794901924207e-15 0.003090166480307026" rpy="0.0 -0.0 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="2.871823829273279e-07" iyy="5.297553928194573e-07" izz="5.041462788210826e-07" ixy="-2.1928449571975276e-20" iyz="-1.5931951187261e-20" ixz="-7.881674870441115e-08" />
+        </inertial>
+        <visual name="Slip_Wheel_3_1_2_visual">
+            <origin xyz="0.05828923560799901 9.947598300641404e-16 0.018939316902473174" rpy="-4.739852891941831e-15 0.31415926535898303 -3.141592653589781" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_3_1_2_collision">
+            <origin xyz="0.05828923560799901 9.947598300641404e-16 0.018939316902473174" rpy="-4.739852891941831e-15 0.31415926535898303 -3.141592653589781" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+    <link name="Slip_Wheel_3_1_3">
+        <inertial>
+            <origin xyz="-0.009510565219410695 -3.623767952376511e-15 0.0030901655734110987" rpy="0.0 -5.551115123125783e-17 -4.3790577010150533e-47" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="2.871823829271829e-07" iyy="5.297553928190236e-07" izz="5.041462788216615e-07" ixy="-2.919166733485645e-37" iyz="4.503392727398352e-37" ixz="7.881674870389353e-08" />
+        </inertial>
+        <visual name="Slip_Wheel_3_1_3_visual">
+            <origin xyz="-0.05828923455192506 -4.973799150320702e-16 0.018939315995576998" rpy="3.141592653589781 0.3141592653589783 4.617388212027113e-15" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_3_1_3_collision">
+            <origin xyz="-0.05828923455192506 -4.973799150320702e-16 0.018939315995576998" rpy="3.141592653589781 0.3141592653589783 4.617388212027113e-15" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+    <link name="Slip_Wheel_3_1_4">
+        <inertial>
+            <origin xyz="-0.005877851616065641 3.197442310920451e-15 -0.008090168652043702" rpy="0.0 -0.0 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="4.371007478248465e-07" iyy="5.297553928203247e-07" izz="3.5422791392486497e-07" ixy="3.388131789017201e-21" iyz="4.336808689942018e-19" ixz="-1.2752817828617647e-07" />
+        </inertial>
+        <visual name="Slip_Wheel_3_1_4_visual">
+            <origin xyz="-0.036024727189551714 5.684341886080802e-16 -0.04958378315008375" rpy="1.955957034465307e-14 -0.9424777960769363 -2.417695855668019e-14" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_3_1_4_collision">
+            <origin xyz="-0.036024727189551714 5.684341886080802e-16 -0.04958378315008375" rpy="1.955957034465307e-14 -0.9424777960769363 -2.417695855668019e-14" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+    <link name="Slip_Wheel_3_1_5">
+        <inertial>
+            <origin xyz="-3.430016590755258e-09 2.486899575160351e-15 0.009999999736990617" rpy="0.0 -5.551115123125783e-17 4.3790577010150533e-47" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="5.297553928686066e-07" iyy="5.297553928190236e-07" izz="2.6157326888023757e-07" ixy="-1.2913922752895388e-37" iyz="4.628248132110018e-37" ixz="2.523099391633747e-19" />
+        </inertial>
+        <visual name="Slip_Wheel_3_1_5_visual">
+            <origin xyz="-3.4300164486467112e-09 -6.394884621840901e-16 0.061288927888739075" rpy="1.351533070548306e-14 1.5707963267948912 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_3_1_5_collision">
+            <origin xyz="-3.4300164486467112e-09 -6.394884621840901e-16 0.061288927888739075" rpy="1.351533070548306e-14 1.5707963267948912 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+
+    <gazebo reference="Wheel_3_1">
+        <material>
+            <ambient>0.05 0.05 0.05 1</ambient>
+            <diffuse>0.1 0.1 0.1 1</diffuse>
+            <specular>0.01 0.01 0.01 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_3_1_1">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_3_1_2">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_3_1_3">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_3_1_4">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_3_1_5">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <!--  -->
+    <link name="Wheel_3_2">
+        <inertial>
+            <origin xyz="-2.2854070849120946e-08 -2.9233610316925507e-08 -0.006249980952917938" rpy="0.0 -0.0 0.0" />
+            <mass value="1.0" />
+            <inertia ixx="1.6448212765267714e-05" iyy="1.6448192668609002e-05" izz="3.1319257083436275e-05" ixy="2.340643737858139e-12" iyz="1.6779765727933937e-11" ixz="9.723843258369058e-12" />
+        </inertial>
+        <visual name="Wheel_3_2_visual">
+            <origin xyz="7.105427357601002e-17 -1.7763568394002505e-17 -0.01125" rpy="-1.5707963267948883 -1.1496826989764279e-14 1.3558546808486167e-31" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/Wheel_Component.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="wheel_black">
+                <color rgba="0.1 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <!-- <collision name="Wheel_3_2_collision">
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <cylinder radius="0.0275" length="0.025"/> 
+            </geometry>
+        </collision> -->
+    </link>
+    <link name="Slip_Wheel_3_2_1">
+        <inertial>
+            <origin xyz="-0.005877855458745032 -4.263256414560601e-15 0.008090167795697933" rpy="0.0 -5.551115123125783e-17 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="4.371007478238694e-07" iyy="5.297553928194573e-07" izz="3.5422791392410756e-07" ixy="-4.124550164494805e-19" iyz="-1.3401475865450345e-19" ixz="1.275281782861682e-07" />
+        </inertial>
+        <visual name="Slip_Wheel_3_2_1_visual">
+            <origin xyz="0.02426902011474084 -1.4921397450962103e-15 -0.03340344670234222" rpy="7.471091066314019e-15 -0.9424777960769397 3.1415926535897736" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_3_2_1_collision">
+            <origin xyz="0.02426902011474084 -1.4921397450962103e-15 -0.03340344670234222" rpy="7.471091066314019e-15 -0.9424777960769397 3.1415926535897736" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+    <link name="Slip_Wheel_3_2_2">
+        <inertial>
+            <origin xyz="0.009510562639809522 -4.405364961712621e-15 -0.0030901735126140297" rpy="0.0 -0.0 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="2.871823829279668e-07" iyy="5.297553928194573e-07" izz="5.04146278821311e-07" ixy="2.1928449571975282e-20" iyz="1.593195118726099e-20" ixz="7.881674870451624e-08" />
+        </inertial>
+        <visual name="Slip_Wheel_3_2_2_visual">
+            <origin xyz="-0.03926810669270474 -7.815970093361102e-16 0.012758976909551833" rpy="3.1415926535897785 0.31415926535897787 -4.617388212027022e-15" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_3_2_2_collision">
+            <origin xyz="-0.03926810669270474 -7.815970093361102e-16 0.012758976909551833" rpy="3.1415926535897785 0.31415926535897787 -4.617388212027022e-15" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+    <link name="Slip_Wheel_3_2_3">
+        <inertial>
+            <origin xyz="0.009510563670043978 4.121147867408581e-15 -0.003090169431776424" rpy="0.0 -0.0 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="2.8718238292791524e-07" iyy="5.29755392819891e-07" izz="5.041462788213627e-07" ixy="2.54911218996176e-19" iyz="-3.5085519315160436e-19" ixz="7.881674870453291e-08" />
+        </inertial>
+        <visual name="Slip_Wheel_3_2_3_visual">
+            <origin xyz="-0.03926810566247028 0.0 0.012758980990389369" rpy="4.73985289194173e-15 0.3141592653589773 1.4942182132626005e-14" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_3_2_3_collision">
+            <origin xyz="-0.03926810566247028 0.0 0.012758980990389369" rpy="4.73985289194173e-15 0.3141592653589773 1.4942182132626005e-14" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+    <link name="Slip_Wheel_3_2_4">
+        <inertial>
+            <origin xyz="-0.005877849593391531 3.126388037344441e-15 0.008090171747085862" rpy="0.0 -5.551115123125783e-17 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="4.3710074782394407e-07" iyy="5.2975539281859e-07" izz="3.542279139249002e-07" ixy="-4.103610358455038e-19" iyz="-1.4045936828652678e-19" ixz="1.2752817828592427e-07" />
+        </inertial>
+        <visual name="Slip_Wheel_3_2_4_visual">
+            <origin xyz="0.024269025980094342 -4.973799150320702e-16 -0.03340344275095426" rpy="-3.1415926535897736 -0.9424777960769388 3.1415926535897856" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_3_2_4_collision">
+            <origin xyz="0.024269025980094342 -4.973799150320702e-16 -0.03340344275095426" rpy="-3.1415926535897736 -0.9424777960769388 3.1415926535897856" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+    <link name="Slip_Wheel_3_2_5">
+        <inertial>
+            <origin xyz="4.822367623003032e-09 -3.339550858072471e-15 -0.010000000000001563" rpy="-1.9446922743316068e-62 -0.0 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="5.297553928671622e-07" iyy="5.297553928194573e-07" izz="2.6157326887994714e-07" ixy="7.525870642000976e-47" iyz="1.2128654660984485e-37" ixz="-1.3611341819526852e-20" />
+        </inertial>
+        <visual name="Slip_Wheel_3_2_5_visual">
+            <origin xyz="4.822367627443924e-09 -5.684341886080802e-16 0.041288928151746805" rpy="-3.1415926535897847 1.570796326794885 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_3_2_5_collision">
+            <origin xyz="4.822367627443924e-09 -5.684341886080802e-16 0.041288928151746805" rpy="-3.1415926535897847 1.570796326794885 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+
+    <gazebo reference="Wheel_3_2">
+        <material>
+            <ambient>0.05 0.05 0.05 1</ambient>
+            <diffuse>0.1 0.1 0.1 1</diffuse>
+            <specular>0.01 0.01 0.01 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_3_2_1">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_3_2_2">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_3_2_3">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_3_2_4">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_3_2_5">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <!-- Wheel 4 -->
+    <link name="Wheel_4_1">
+        <inertial>
+            <origin xyz="-2.2854070849121065e-08 -0.005000019047082063 -2.9233610256973624e-08" rpy="0.0 0.0 0.0" />
+            <mass value="1.0" />
+            <inertia ixx="1.644821276526789e-05" iyy="3.1319257083436275e-05" izz="1.644819266860571e-05" ixy="-9.723843258369108e-12" iyz="-1.6779765836354245e-11" ixz="2.3406438462783834e-12" />
+        </inertial>
+        <visual name="Wheel_4_1_visual">
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/Wheel_Component.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="wheel_black">
+                <color rgba="0.1 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <!-- <collision name="Wheel_4_1_collision">
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <cylinder radius="0.0275" length="0.025"/> 
+            </geometry>
+        </collision> -->
+    </link>
+    
+    <link name="Slip_Wheel_4_1_1">
+        <inertial>
+            <origin xyz="-4.822367469792255e-09 3.552713678800501e-15 -0.010000000000001208" rpy="0.0 -0.0 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="5.297553928671622e-07" iyy="5.297553928190236e-07" izz="2.6157326887994714e-07" ixy="0.0" iyz="-3.669953109718862e-55" ixz="0.0" />
+        </inertial>
+        <visual name="Slip_Wheel_4_1_1_visual">
+            <origin xyz="-4.822367469792255e-09 1.4210854715202004e-16 0.0412889281517473" rpy="-3.697785493223493e-32 1.5707963267948966 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_4_1_1_collision">
+            <origin xyz="-4.822367469792255e-09 1.4210854715202004e-16 0.0412889281517473" rpy="-3.697785493223493e-32 1.5707963267948966 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+
+    <link name="Slip_Wheel_4_1_2">
+        <inertial>
+            <origin xyz="-3.4300166618095317e-09 -3.268496584496461e-15 -0.009999999736990759" rpy="0.0 -0.0 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="5.29755392867331e-07" iyy="5.297553928190236e-07" izz="2.6157326887934474e-07" ixy="-8.375922415906467e-21" iyz="-2.5778438528092528e-20" ixz="-1.4680139767101093e-19" />
+        </inertial>
+        <visual name="Slip_Wheel_4_1_2_visual">
+            <origin xyz="-3.4300166618095317e-09 1.4210854715202004e-16 -0.061288927888739284" rpy="-3.141592653589793 -1.5707963267948966 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_4_1_2_collision">
+            <origin xyz="-3.4300166618095317e-09 1.4210854715202004e-16 -0.061288927888739284" rpy="-3.141592653589793 -1.5707963267948966 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+    <link name="Slip_Wheel_4_1_3">
+        <inertial>
+            <origin xyz="2.5581385898476585e-11 -3.268496584496461e-15 -0.009999998421949811" rpy="0.0 -0.0 -6.145660542046629e-65" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="5.29755392868976e-07" iyy="5.29755392819891e-07" izz="2.615732688807356e-07" ixy="-3.84340407009237e-65" iyz="2.9690544343301483e-55" ixz="-9.361831649528154e-19" />
+        </inertial>
+        <visual name="Slip_Wheel_4_1_3_visual">
+            <origin xyz="2.5581385898476585e-11 1.4210854715202004e-16 -0.06128892657369832" rpy="3.141592653589793 -1.5707963267948966 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_4_1_3_collision">
+            <origin xyz="2.5581385898476585e-11 1.4210854715202004e-16 -0.06128892657369832" rpy="3.141592653589793 -1.5707963267948966 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+
+    <link name="Slip_Wheel_4_1_4">
+        <inertial>
+            <origin xyz="-4.173885876923577e-09 3.268496584496461e-15 -0.009999998703187032" rpy="0.0 -0.0 6.145660542046629e-65" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="5.297553928671197e-07" iyy="5.297553928181563e-07" izz="2.615732688795559e-07" ixy="2.5217016279967903e-19" iyz="3.5284668705001205e-19" ixz="9.386183846761716e-20" />
+        </inertial>
+        <visual name="Slip_Wheel_4_1_4_visual">
+            <origin xyz="-4.173885912450714e-09 -1.4210854715202004e-16 -0.06128892685493554" rpy="-1.2246467991473535e-16 -1.5707963267948966 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_4_1_4_collision">
+            <origin xyz="-4.173885912450714e-09 -1.4210854715202004e-16 -0.06128892685493554" rpy="-1.2246467991473535e-16 -1.5707963267948966 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+
+    <link name="Slip_Wheel_4_1_5">
+        <inertial>
+            <origin xyz="3.6377211642957263e-09 3.268496584496461e-15 -0.009999999987819095" rpy="0.0 5.551115123125784e-17 0.0" />
+            <mass value="0.015441620840894963" />
+            <inertia ixx="5.297553928673389e-07" iyy="5.297553928188068e-07" izz="2.615732688793368e-07" ixy="-4.2083093886538695e-19" iyz="1.0823632012641107e-19" ixz="-1.358958484751118e-19" />
+        </inertial>
+        <visual name="Slip_Wheel_4_1_5_visual">
+            <origin xyz="3.6377211642957263e-09 -1.4210854715202004e-16 -0.061288928139567586" rpy="-1.224646799147353e-16 -1.5707963267948966 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_4_1_5_collision">
+            <origin xyz="3.6377211642957263e-09 -1.4210854715202004e-16 -0.061288928139567586" rpy="-1.224646799147353e-16 -1.5707963267948966 0" />
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+
+    <gazebo reference="Wheel_4_1">
+        <material>
+            <ambient>0.05 0.05 0.05 1</ambient>
+            <diffuse>0.1 0.1 0.1 1</diffuse>
+            <specular>0.01 0.01 0.01 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_4_1_1">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_4_1_2">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_4_1_3">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_4_1_4">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_4_1_5">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <!--  -->
+    <link name="Wheel_4_2">
+        <inertial>
+            <origin xyz="-2.2854070849120946e-08 -2.9233610256973465e-08 0.0062500190470817785" rpy="0.0 -0.0 0.0" />
+            <mass value="1.0" />
+            <inertia ixx="1.6448212765271183e-05" iyy="1.6448192668609002e-05" izz="3.1319257083436275e-05" ixy="2.340643737858139e-12" iyz="1.6779765944774372e-11" ixz="9.723843258369058e-12" />
+        </inertial>
+        <visual name="Wheel_4_2_visual">
+            <origin xyz="0.0 0.0 0.0012499999999997157" rpy="-1.5707963267948966 1.368455531567226e-48 0.0" />            
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/Wheel_Component.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="wheel_black">
+                <color rgba="0.1 0.1 0.1 1.0"/>
+            </material>
+        </visual>
+        <!-- <collision name="Wheel_4_2_collision">
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <cylinder radius="0.0275" length="0.025"/> 
+            </geometry>
+        </collision> -->
+    </link>
+
+    <link name="Slip_Wheel_4_2_1">
+        <inertial>
+            <origin xyz="0.0058778554587447475 0 0.00809016779569797" rpy="0 0 0"/>
+            <mass value="0.015441620840894963"/>
+            <inertia ixx="4.371e-07" iyy="5.297e-07" izz="3.542e-07" ixy="0" iyz="0" ixz="0"/>
+        </inertial>
+        <visual name="Slip_Wheel_4_2_1_visual">
+            <origin xyz="-0.02426902 0 -0.03340345" rpy="0 -0.9424778 0"/>
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_4_2_1_collision">
+            <origin xyz="-0.02426902 0 -0.03340345" rpy="0 -0.9424778 0"/>
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+
+    <link name="Slip_Wheel_4_2_2">
+        <inertial>
+            <origin xyz="0 0 -0.01" rpy="0 0 0"/>
+            <mass value="0.015441620840894963"/>
+            <inertia ixx="5.298e-07" iyy="5.298e-07" izz="2.616e-07" ixy="0" iyz="0" ixz="0"/>
+        </inertial>
+        <visual name="Slip_Wheel_4_2_2_visual">
+            <origin xyz="0 0 0.04128893" rpy="3.1416 1.5708 0"/>
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_4_2_2_collision">
+            <origin xyz="0 0 0.04128893" rpy="3.1416 1.5708 0"/>
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+
+    <link name="Slip_Wheel_4_2_3">
+        <inertial>
+            <origin xyz="0.00587785 0 0.00809017" rpy="0 0 0"/>
+            <mass value="0.015441620840894963"/>
+            <inertia ixx="4.371e-07" iyy="5.298e-07" izz="3.542e-07" ixy="0" iyz="0" ixz="0"/>
+        </inertial>
+        <visual name="Slip_Wheel_4_2_3_visual">
+            <origin xyz="-0.02426903 0 -0.03340344" rpy="3.1416 -0.9424778 0"/>
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_4_2_3_collision">
+            <origin xyz="-0.02426903 0 -0.03340344" rpy="3.1416 -0.9424778 0"/>
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+
+    <link name="Slip_Wheel_4_2_4">
+        <inertial>
+            <origin xyz="-0.00951056 0 -0.00309017" rpy="0 0 0"/>
+            <mass value="0.015441620840894963"/>
+            <inertia ixx="2.872e-07" iyy="5.298e-07" izz="5.041e-07" ixy="0" iyz="0" ixz="0"/>
+        </inertial>
+        <visual name="Slip_Wheel_4_2_4_visual">
+            <origin xyz="0.03926811 0 0.01275898" rpy="0 0.31416 3.1416"/>
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_4_2_4_collision">
+            <origin xyz="0.03926811 0 0.01275898" rpy="0 0.31416 3.1416"/>
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+
+    <link name="Slip_Wheel_4_2_5">
+        <inertial>
+            <origin xyz="-0.00951056 0 -0.00309017" rpy="0 0 0"/>
+            <mass value="0.015441620840894963"/>
+            <inertia ixx="2.872e-07" iyy="5.298e-07" izz="5.041e-07" ixy="0" iyz="0" ixz="0"/>
+        </inertial>
+        <visual name="Slip_Wheel_4_2_5_visual">
+            <origin xyz="0.03926811 0 0.01275898" rpy="-3.1416 0.31416 3.1416"/>
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="roller_red">
+                <color rgba="0.8 0.1 0.1 1"/>
+            </material>
+        </visual>
+        <collision name="Slip_Wheel_4_2_5_collision">
+            <origin xyz="0.03926811 0 0.01275898" rpy="-3.1416 0.31416 3.1416"/>
+            <geometry>
+                <mesh filename="package://mobile_robot/meshes/slip_wheel.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>2.0</mu> <mu2>0.01</mu2>
+                        <fdir1>1 0 0</fdir1>
+                        <slip1>0.0</slip1>
+                        <slip2>0.0</slip2>
+                    </ode>
+                </friction>
+                <contact>
+                    <ode>
+                        <min_depth>0.001</min_depth>
+                        <max_vel>0.0</max_vel> </ode>
+                </contact>
+            </surface>
+        </collision>
+    </link>
+
+    <!-- COLORS -->
+    <gazebo reference="Wheel_4_2">
+        <material>
+            <ambient>0.05 0.05 0.05 1</ambient>
+            <diffuse>0.1 0.1 0.1 1</diffuse>
+            <specular>0.01 0.01 0.01 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_4_2_1">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_4_2_2">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_4_2_3">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_4_2_4">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+
+    <gazebo reference="Slip_Wheel_4_2_5">
+        <material>
+            <ambient>0.7 0.1 0.1 1</ambient>
+            <diffuse>0.8 0.1 0.1 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+        </material>
+    </gazebo>
+    
+
+    <joint name="camera_joint" type="fixed">
+        <origin xyz="0.474 0.0 0.1355" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="Realsense_D455" />
+    </joint>
+
+    <xacro:realsense_sensor name="base_camera" topics_ns="base_cam" parent_link="Realsense_D455">
+        <origin xyz="0.0 0 0.0" rpy="0 0 0"/>
+    </xacro:realsense_sensor>
+
+    <!-- Omni wheel 1 -->
+    <joint name="Omni_wheel_1_1_slip_1" type="continuous">
+        <origin xyz="0.024223899680789387 -0.005 -0.00264379825167655" rpy="3.141592653589792 -0.2856726404365542 -3.141592653589792" />
+        <parent link="Wheel_1_1" />
+        <child link="Slip_Wheel_1_1_1" />
+        <axis xyz="-0.5645036683149988 -1.5618400682676615e-31 0.8254306799289144" />
+    </joint>
+    <joint name="Omni_wheel_1_1_slip_2" type="continuous">
+        <origin xyz="0.010000000717635302 -0.005000000000000071 0.022221315929249634" rpy="-3.1415926535897913 -0.9709644209993629 -8.15198326856853e-16" />
+        <parent link="Wheel_1_1" />
+        <child link="Slip_Wheel_1_1_2" />
+        <axis xyz="0.564504 1.6278756146437125e-31 0.825431" />
+    </joint>
+    <joint name="Omni_wheel_1_1_slip_3" type="continuous">
+        <origin xyz="-0.018043561445575236 -0.005000000000000071 0.016377329761251253" rpy="-1.9423133147615577e-15 -0.9139911711545129 -3.141592653589791" />
+        <parent link="Wheel_1_1" />
+        <child link="Slip_Wheel_1_1_3" />
+        <axis xyz="0.5645037330884426 -5.55758424184992e-32 0.8254301817369004" />
+    </joint>
+    <joint name="Omni_wheel_1_1_slip_4" type="continuous">
+        <origin xyz="-0.02115153228523557 -0.005000000000000071 -0.012099566110585548" rpy="-1.2591525483712703e-15 0.3426458902814044 -3.1415926535897927" />
+        <parent link="Wheel_1_1" />
+        <child link="Slip_Wheel_1_1_4" />
+        <axis xyz="0.5645033804292607 -1.9713515692337302e-31 0.8254304208162778" />
+    </joint>
+    <joint name="Omni_wheel_1_1_slip_5" type="continuous">
+        <origin xyz="0.004971185078081888 -0.005 -0.02385527568319951" rpy="3.141592653589752 -1.5423097018724716 -3.1415926535897505" />
+        <parent link="Wheel_1_1" />
+        <child link="Slip_Wheel_1_1_5" />
+        <axis xyz="-0.564503938409712 6.626037173403889e-32 0.8254302375615543" />
+    </joint>
+
+    <!--  -->
+
+    <joint name="Omni_wheel_1_2_slip_1" type="continuous">
+        <origin xyz="0.024138769999999993 0.0033326900000000006 0.00625" rpy="1.5707963267948966 1.4063446456392123e-31 2.827433388230814" />
+        <parent link="Wheel_1_2" />
+        <child link="Slip_Wheel_1_2_1" />
+        <axis xyz="0.028482574165396457 4.34186268894525e-34 0.999594013868587" />
+    </joint>
+    <joint name="Omni_wheel_1_2_slip_2" type="continuous">
+        <origin xyz="0.010628870000000035 -0.021927469999999998 0.00625" rpy="-1.5707963267948966 -4.930380657631324e-31 -1.5707963267948966" />
+        <parent link="Wheel_1_2" />
+        <child link="Slip_Wheel_1_2_2" />
+        <axis xyz="-0.028483 -1.5401184134638517e-33 0.999594" />
+    </joint>
+    <joint name="Omni_wheel_1_2_slip_3" type="continuous">
+        <origin xyz="-0.017569760000000018 -0.01688462 0.00625" rpy="-1.5707963267948966 -1.6407981782520038e-31 -2.8274333882308142" />
+        <parent link="Wheel_1_2" />
+        <child link="Slip_Wheel_1_2_3" />
+        <axis xyz="-0.028482440869908532 -5.176591541721788e-34 0.9995941797164948" />
+    </joint>
+    <joint name="Omni_wheel_1_2_slip_4" type="continuous">
+        <origin xyz="-0.02148758000000001 0.011492210000000001 0.00625" rpy="-1.5707963267948966 3.916311614792677e-31 2.199114857512855" />
+        <parent link="Wheel_1_2" />
+        <child link="Slip_Wheel_1_2_4" />
+        <axis xyz="-0.028482919398132023 1.2201875533341106e-33 0.9995943788415177" />
+    </joint>
+    <joint name="Omni_wheel_1_2_slip_5" type="continuous">
+        <origin xyz="0.004289709999999971 0.02398719 0.00625" rpy="1.5707963267948966 -4.061211866729864e-31 -2.1991148575128556" />
+        <parent link="Wheel_1_2" />
+        <child link="Slip_Wheel_1_2_5" />
+        <axis xyz="0.028482839192393195 -1.2717778239404004e-33 0.9995948327440175" />
+    </joint>
+
+
+    <joint name="Wheel_Component_Rigid-53" type="fixed">
+        <origin xyz="1.7763568394002506e-16 0.00125 4.263256414560601e-16" rpy="-1.5707963267948952 0.5998319057955337 1.7299993165085977e-15" />
+        <parent link="Wheel_1_1" />
+        <child link="Wheel_1_2" />
+    </joint>
+    <joint name="mobile_base_Revolute_1" type="continuous">
+        <origin xyz="0.375 0.388 0.015" rpy="0.0 -0.0 0.0" />
+        <parent link="base_link" />
+        <child link="Wheel_1_1" />
+        <axis xyz="0.0 1.0 0.0" />
+    </joint>
+
+    <!-- Omni wheel 2 -->
+    <joint name="Omni_wheel_2_1_slip_1" type="continuous">
+        <origin xyz="0.010000000000000285 -0.005000000000000071 0.022221320000000006" rpy="-3.141592653589793 -1.5707963267948966 0" />
+        <parent link="Wheel_2_1" />
+        <child link="Slip_Wheel_2_1_1" />
+        <axis xyz="0.0 0.0 1.0" />
+    </joint>
+    <joint name="Omni_wheel_2_1_slip_2" type="continuous">
+        <origin xyz="0.024223900000000284 -0.005000000000000071 -0.002643799999999952" rpy="3.141592653589793 0.31415926535897937 3.141592653589793" />
+        <parent link="Wheel_2_1" />
+        <child link="Slip_Wheel_2_1_2" />
+        <axis xyz="1.4412327498103394e-07 0.0 1.0000004617688831" />
+    </joint>
+    <joint name="Omni_wheel_2_1_slip_3" type="continuous">
+        <origin xyz="0.004971190000000334 -0.005000000000000071 -0.023855269999999915" rpy="3.141592653589793 -0.9424777960769378 3.141592653589793" />
+        <parent link="Wheel_2_1" />
+        <child link="Slip_Wheel_2_1_3" />
+        <axis xyz="2.0741522138711943e-07 0.0 0.9999998562569681" />
+    </joint>
+    <joint name="Omni_wheel_2_1_slip_4" type="continuous">
+        <origin xyz="-0.021151529999999637 -0.005000000000000071 -0.012099569999999935" rpy="0.0 0.942477796076938 3.141592653589793" />
+        <parent link="Wheel_2_1" />
+        <child link="Slip_Wheel_2_1_4" />
+        <axis xyz="2.0741522122058598e-07 0.0 0.9999998562569683" />
+    </joint>
+    <joint name="Omni_wheel_2_1_slip_5" type="continuous">
+        <origin xyz="-0.01804355999999963 -0.005000000000000071 0.016377330000000013" rpy="0.0 -0.3141592653589791 3.141592653589793" />
+        <parent link="Wheel_2_1" />
+        <child link="Slip_Wheel_2_1_5" />
+        <axis xyz="1.441232747034782e-07 0.0 1.0000004617688831" />
+    </joint>
+
+    <!--  -->
+    <joint name="Omni_wheel_2_2_slip_1" type="continuous">
+        <origin xyz="0.021151529999999995 -0.012099570000000002 -0.00625" rpy="-1.5707963267948966 -0.0 -2.1991148575128556" />
+        <parent link="Wheel_2_2" />
+        <child link="Slip_Wheel_2_2_1" />
+        <axis xyz="-0.9510563154925784 -7.0854667260733925e-47 0.30901714721950524" />
+    </joint>
+    <joint name="Omni_wheel_2_2_slip_2" type="continuous">
+        <origin xyz="-0.004971189999999979 -0.02385527 -0.00625" rpy="1.5707963267948966 -0.0 2.199114857512855" />
+        <parent link="Wheel_2_2" />
+        <child link="Slip_Wheel_2_2_2" />
+        <axis xyz="-0.9510563154925782 7.0854667260733925e-47 0.3090171472195057" />
+    </joint>
+    <joint name="Omni_wheel_2_2_slip_3" type="continuous">
+        <origin xyz="-0.0242239 -0.002643800000000001 -0.00625" rpy="1.5707963267948966 -0.0 -2.8274333882308142" />
+        <parent link="Wheel_2_2" />
+        <child link="Slip_Wheel_2_2_3" />
+        <axis xyz="0.5877854071152336 -2.7064074936509634e-47 -0.809017452667357" />
+    </joint>
+    <joint name="Omni_wheel_2_2_slip_4" type="continuous">
+        <origin xyz="-0.01 0.022221320000000003 -0.00625" rpy="1.5707963267948966 -0.0 -1.5707963267948966" />
+        <parent link="Wheel_2_2" />
+        <child link="Slip_Wheel_2_2_4" />
+        <axis xyz="0.0 -8.758118464844858e-47 1.0" />
+    </joint>
+    <joint name="Omni_wheel_2_2_slip_5" type="continuous">
+        <origin xyz="0.018043559999999986 0.01637733 -0.00625" rpy="-1.5707963267948966 -0.0 2.827433388230814" />
+        <parent link="Wheel_2_2" />
+        <child link="Slip_Wheel_2_2_5" />
+        <axis xyz="0.5877854071152341 2.7064074936509634e-47 -0.8090174526673568" />
+    </joint>
+
+
+    <joint name="Wheel_Component_Rigid-65" type="fixed">
+        <origin xyz="3.552713678800501e-16 -0.01125000000000007 4.4408920985006264e-17" rpy="-1.5707963267948966 -0.0 0.0" />
+        <parent link="Wheel_2_1" />
+        <child link="Wheel_2_2" />
+    </joint>
+    <joint name="mobile_base_Revolute_2" type="continuous">
+        <origin xyz="0.375 -0.378 0.015" rpy="0.0 -0.0 0.0" />
+        <parent link="base_link" />
+        <child link="Wheel_2_1" />
+        <axis xyz="0.0 1.0 0.0" />
+    </joint>
+
+    <!-- Omni wheel 3 -->
+    <joint name="Omni_wheel_3_1_slip_1" type="continuous">
+        <origin xyz="-0.004971194238722027 -0.005000000000000071 -0.02385527804036851" rpy="-3.141592653589779 -1.570796326794895 0" />
+        <parent link="Wheel_3_1" />
+        <child link="Slip_Wheel_3_1_1" />
+        <axis xyz="-0.587785252292473 7.888609052210118e-31 0.8090169943749476" />
+    </joint>
+    <joint name="Omni_wheel_3_1_slip_2" type="continuous">
+        <origin xyz="0.021151533420050477 -0.004999999999999716 -0.012099572043279104" rpy="3.141592653589793 0.3141592653589764 -3.141592653589779" />
+        <parent link="Wheel_3_1" />
+        <child link="Slip_Wheel_3_1_2" />
+        <axis xyz="-0.9510569109269176 -2.437714303486814e-31 -0.30901727413875985" />
+    </joint>
+    <joint name="Omni_wheel_3_1_slip_3" type="continuous">
+        <origin xyz="0.018043553087722194 -0.004999999999999787 0.016377326667059044" rpy="3.141592653589793 -0.9424777960769382 -3.141592653589779" />
+        <parent link="Wheel_3_1" />
+        <child link="Slip_Wheel_3_1_3" />
+        <axis xyz="0.9510564436822349 6.382018829591873e-31 -0.3090167526923099" />
+    </joint>
+    <joint name="Omni_wheel_3_1_slip_4" type="continuous">
+        <origin xyz="-0.009999998421950842 -0.005000000000000142 0.022221315152051134" rpy="-2.1309512386281655e-30 0.9424777960769348 -3.141592653589779" />
+        <parent link="Wheel_3_1" />
+        <child link="Slip_Wheel_3_1_4" />
+        <axis xyz="0.587785 -6.382018829591873e-31 0.8090169999999999" />
+    </joint>
+    <joint name="Omni_wheel_3_1_slip_5" type="continuous">
+        <origin xyz="-0.024223899724950863 -0.005000000000000427 -0.002643799825632165" rpy="-1.3170002938408981e-30 -0.31415926535898026 -3.141592653589779" />
+        <parent link="Wheel_3_1" />
+        <child link="Slip_Wheel_3_1_5" />
+        <axis xyz="1.4412327464796704e-07 2.437714303486814e-31 -1.0000004617688831" />
+    </joint>
+
+    <!--  -->
+    <joint name="Omni_wheel_3_2_slip_1" type="continuous">
+        <origin xyz="-0.0242239 -0.002643800000000001 -0.00625" rpy="1.5707963267948966 9.940227302722351e-31 -2.8274333882308142" />
+        <parent link="Wheel_3_2" />
+        <child link="Slip_Wheel_3_2_1" />
+        <axis xyz="0.5877854071152336 1.6437886736715162e-30 -0.809017452667357" />
+    </joint>
+    <joint name="Omni_wheel_3_2_slip_2" type="continuous">
+        <origin xyz="-0.004971189999999979 -0.02385527 -0.00625" rpy="1.5707963267948966 -1.7452107232280149e-31 2.199114857512855" />
+        <parent link="Wheel_3_2" />
+        <child link="Slip_Wheel_3_2_2" />
+        <axis xyz="-0.9510563154925782 5.522354283755332e-31 0.3090171472195057" />
+    </joint>
+    <joint name="Omni_wheel_3_2_slip_3" type="continuous">
+        <origin xyz="0.021151529999999995 -0.012099570000000002 -0.00625" rpy="-1.5707963267948966 1.1018826847208053e-30 -2.1991148575128556" />
+        <parent link="Wheel_3_2" />
+        <child link="Slip_Wheel_3_2_3" />
+        <axis xyz="-0.9510563154925784 1.3024870003257966e-30 0.30901714721950524" />
+    </joint>
+    <joint name="Omni_wheel_3_2_slip_4" type="continuous">
+        <origin xyz="0.018043559999999986 0.01637733 -0.00625" rpy="-1.5707963267948966 5.064798784496404e-31 2.827433388230814" />
+        <parent link="Wheel_3_2" />
+        <child link="Slip_Wheel_3_2_4" />
+        <axis xyz="0.5877854071152341 1.3572180700756034e-30 -0.8090174526673568" />
+    </joint>
+    <joint name="Omni_wheel_3_2_slip_5" type="continuous">
+        <origin xyz="-0.01 0.022221320000000003 -0.00625" rpy="1.5707963267948966 7.888609052210118e-31 -1.5707963267948966" />
+        <parent link="Wheel_3_2" />
+        <child link="Slip_Wheel_3_2_5" />
+        <axis xyz="1.232595164407831e-32 4.636809683543506e-31 1.0" />
+    </joint>
+    
+    
+    <joint name="Wheel_Component_Rigid-77" type="fixed">
+        <origin xyz="2.1316282072803005e-16 0.00125 7.105427357601002e-17" rpy="1.5707963267948966 0.6283185307179586 1.421085968490298e-14" />
+        <parent link="Wheel_3_1" />
+        <child link="Wheel_3_2" />
+    </joint>
+    <joint name="mobile_base_Revolute_3" type="continuous">
+        <origin xyz="-0.375 -0.390 0.015" rpy="0.0 -0.0 0.0" />
+        <parent link="base_link" />
+        <child link="Wheel_3_1" />
+        <axis xyz="0.0 1.0 0.0" />
+    </joint>
+
+    <!-- Omni wheel 4 -->
+    <joint name="Omni_wheel_4_1_slip_1" type="continuous">
+        <origin xyz="0.009999999999999929 -0.004999999999999858 0.022221319999999888" rpy="3.141592653589793 -1.5707963267948966 0" />
+        <parent link="Wheel_4_1" />
+        <child link="Slip_Wheel_4_1_1" />
+        <axis xyz="0.0 1.3684555315671896e-48 1.0" />
+    </joint>
+    <joint name="Omni_wheel_4_1_slip_2" type="continuous">
+        <origin xyz="-0.018043559999999913 -0.004999999999999858 0.01637732999999991" rpy="1.2960272531535903e-32 -0.314159265358979 3.141592653589793" />
+        <parent link="Wheel_4_1" />
+        <child link="Slip_Wheel_4_1_2" />
+        <axis xyz="1.441232747034782e-07 4.228760229982982e-49 1.0000004617688831" />
+    </joint>
+    <joint name="Omni_wheel_4_1_slip_3" type="continuous">
+        <origin xyz="-0.021151529999999853 -0.004999999999999858 -0.012099569999999938" rpy="2.0970161459486738e-32 0.9424777960769382 -3.141592653589793" />
+        <parent link="Wheel_4_1" />
+        <child link="Slip_Wheel_4_1_3" />
+        <axis xyz="2.0741522122058598e-07 -1.107103788781893e-48 0.9999998562569683" />
+    </joint>
+    <joint name="Omni_wheel_4_1_slip_4" type="continuous">
+        <origin xyz="0.004971189999999979 -0.004999999999999858 -0.023855269999999873" rpy="-3.141592653589793 -0.9424777960769376 3.141592653589793" />
+        <parent link="Wheel_4_1" />
+        <child link="Slip_Wheel_4_1_4" />
+        <axis xyz="2.0741522138711943e-07 1.107103788781893e-48 0.9999998562569681" />
+    </joint>
+    <joint name="Omni_wheel_4_1_slip_5" type="continuous">
+        <origin xyz="0.024223899999999857 -0.004999999999999858 -0.0026437999999999852" rpy="-3.141592653589793 0.3141592653589795 3.141592653589793" />
+        <parent link="Wheel_4_1" />
+        <child link="Slip_Wheel_4_1_5" />
+        <axis xyz="1.4412327498103394e-07 -4.228760229982982e-49 1.0000004617688831" />
+    </joint>
+
+    <!--  -->
+    <joint name="Omni_wheel_4_2_slip_1" type="continuous">
+        <origin xyz="0.0242239 -0.002643800000000001 0.00625" rpy="1.5707963267948966 -1.3014785505571587e-48 2.827433388230814" />
+        <parent link="Wheel_4_2" />
+        <child link="Slip_Wheel_4_2_1" />
+        <axis xyz="-0.587785407115234 -8.457520459966054e-49 -0.8090174526673568" />
+    </joint>
+    <joint name="Omni_wheel_4_2_slip_2" type="continuous">
+        <origin xyz="0.01 0.022221320000000003 0.00625" rpy="-1.5707963267948966 -0.0 -1.5707963267948966" />
+        <parent link="Wheel_4_2" />
+        <child link="Slip_Wheel_4_2_2" />
+        <axis xyz="0.0 2.7369110631344083e-48 1.0" />
+    </joint>
+    <joint name="Omni_wheel_4_2_slip_3" type="continuous">
+        <origin xyz="-0.018043559999999986 0.01637733 0.00625" rpy="-1.5707963267948966 -1.3014785505571587e-48 -2.8274333882308142" />
+        <parent link="Wheel_4_2" />
+        <child link="Slip_Wheel_4_2_3" />
+        <axis xyz="-0.5877854071152337 8.457520459966054e-49 -0.8090174526673569" />
+    </joint>
+    <joint name="Omni_wheel_4_2_slip_4" type="continuous">
+        <origin xyz="-0.021151529999999995 -0.012099570000000002 0.00625" rpy="-1.5707963267948966 -8.043579798732725e-49 2.199114857512855" />
+        <parent link="Wheel_4_2" />
+        <child link="Slip_Wheel_4_2_4" />
+        <axis xyz="0.9510563154925783 -2.2142075775638096e-48 0.30901714721950563" />
+    </joint>
+    <joint name="Omni_wheel_4_2_slip_5" type="continuous">
+        <origin xyz="0.004971189999999979 -0.02385527 0.00625" rpy="1.5707963267948966 -8.043579798732726e-49 -2.1991148575128556" />
+        <parent link="Wheel_4_2" />
+        <child link="Slip_Wheel_4_2_5" />
+        <axis xyz="0.9510563154925782 2.2142075775638096e-48 0.30901714721950535" />
+    </joint>
+    
+    
+    <joint name="Wheel_Component_Rigid-89" type="fixed">
+        <origin xyz="0.0 0.001250000000000142 0.0" rpy="-1.5707963267948966 -1.1102230246251506e-16 -1.2325951644078303e-32" />
+        <parent link="Wheel_4_1" />
+        <child link="Wheel_4_2" />
+    </joint>
+
+    <joint name="mobile_base_Revolute_4" type="continuous">
+        <origin xyz="-0.375 0.388 0.015" rpy="0.0 -0.0 0.0" />
+        <parent link="base_link" />
+        <child link="Wheel_4_1" />
+        <axis xyz="0.0 1.0 0.0" />
+    </joint>
+
+
+</robot>

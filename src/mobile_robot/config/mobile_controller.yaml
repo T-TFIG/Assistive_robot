@@ -34,10 +34,10 @@ omni_base_controller:
     use_sim_time: true
     header_frame: "odom"
     child_frame: "base_link"
-    num_of_wheels: 4
-    robot_length: 0.5
-    robot_width: 0.335
-    wheel_radius: 0.0635
+    num_of_wheels: 4  #1.116
+    robot_length: 0.217
+    robot_width: 0.211   # Increased from 0.195 0.14
+    wheel_radius: 0.02525 #55 #52
     dof_names:
       - mobile_base_Revolute_1
       - mobile_base_Revolute_2
@@ -46,12 +46,12 @@ omni_base_controller:
     command_interface: effort        
     state_interfaces:
       - velocity
-    i_min: -5.0
-    i_max: 5.0
-    wheel_1: {kp: 0.3, ki: 0.05, kd: 0.0}
-    wheel_2: {kp: 0.3, ki: 0.06, kd: 0.0}
-    wheel_3: {kp: 0.3, ki: 0.06, kd: 0.0}
-    wheel_4: {kp: 0.3, ki: 0.05, kd: 0.0}
+    i_min: -15.0
+    i_max: 15.0
+    wheel_1: {kp: 0.02, ki: 0.02, kd: 0.0}
+    wheel_2: {kp: 0.02, ki: 0.02, kd: 0.0}
+    wheel_3: {kp: 0.02, ki: 0.02, kd: 0.0}
+    wheel_4: {kp: 0.02, ki: 0.02, kd: 0.0}
     init_odom_vel:
       X: 0.0
       Y: 0.0
