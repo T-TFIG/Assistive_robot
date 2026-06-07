@@ -13,6 +13,9 @@ controller_manager:
     arm_controller:
       type: joint_trajectory_controller/JointTrajectoryController
 
+    imu_sensor_broadcaster:
+      type: imu_sensor_broadcaster/IMUSensorBroadcaster
+
 joint_state_broadcaster:
   ros__parameters:
     use_sim_time: true
@@ -58,6 +61,12 @@ omni_base_controller:
       Yaw: 0.0
 
 # ADD THIS BLOCK: Settings for the UR5 arm
+imu_sensor_broadcaster:
+  ros__parameters:
+    use_sim_time: true
+    sensor_name: imu_sensor
+    frame_id: imu_link
+
 arm_controller:
   ros__parameters:
     use_sim_time: true

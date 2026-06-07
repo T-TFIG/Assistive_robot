@@ -192,19 +192,15 @@ controller_interface::return_type PidController::update(
     pseudo_odom_[1] += (vel(1) * sin(theta_mid) + vel(2) * cos(theta_mid)) * dt;
     pseudo_odom_[2] += delta_theta;
 
-    std::cout << pseudo_odom_[2] << std::endl;
-
     auto odom_msg = std::make_unique<nav_msgs::msg::Odometry>();
     odom_msg->header.stamp = time;
     odom_msg->header.frame_id = "odom";
-    odom_msg->child_frame_id = "base_link";
+    odom_msg->child_frame_id = "base_footprint";
 
-    // Set the position
     odom_msg->pose.pose.position.x = pseudo_odom_[0];
     odom_msg->pose.pose.position.y = pseudo_odom_[1];
     odom_msg->pose.pose.position.z = 0.0;
 
-    // Convert Euler Theta to Quaternion
     tf2::Quaternion q;
     q.setRPY(0, 0, pseudo_odom_[2]);
     odom_msg->pose.pose.orientation.x = q.x();
@@ -212,13 +208,28 @@ controller_interface::return_type PidController::update(
     odom_msg->pose.pose.orientation.z = q.z();
     odom_msg->pose.pose.orientation.w = q.w();
 
-    // Set the velocity
     odom_msg->twist.twist.linear.x = vel(1);
     odom_msg->twist.twist.linear.y = vel(2);
     odom_msg->twist.twist.angular.z = vel(0);
 
-    // Finally, publish
     odom_pub_->publish(std::move(odom_msg));
+
+    geometry_msgs::msg::TransformStamped t;
+
+    t.header.stamp = time;
+    t.header.frame_id = "odom";
+    t.child_frame_id = "base_footprint";
+
+    t.transform.translation.x = pseudo_odom_[0];
+    t.transform.translation.y = pseudo_odom_[1];
+    t.transform.translation.z = 0.0;
+
+    t.transform.rotation.x = q.x();
+    t.transform.rotation.y = q.y();
+    t.transform.rotation.z = q.z();
+    t.transform.rotation.w = q.w();
+
+    tf_boardcaster_->sendTransform(t);
 
     return controller_interface::return_type::OK;
 }

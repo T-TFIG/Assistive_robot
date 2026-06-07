@@ -2147,9 +2147,9 @@
         <child link="Realsense_D455" />
     </joint>
 
-    <xacro:realsense_sensor name="base_camera" topics_ns="base_cam" parent_link="Realsense_D455">
+    <!-- <xacro:realsense_sensor name="base_camera" topics_ns="base_cam" parent_link="Realsense_D455">
         <origin xyz="0.0 0 0.0" rpy="0 0 0"/>
-    </xacro:realsense_sensor>
+    </xacro:realsense_sensor> -->
 
     <!-- Omni wheel 1 -->
     <joint name="Omni_wheel_1_1_slip_1" type="continuous">

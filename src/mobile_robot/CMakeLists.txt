@@ -9,9 +9,14 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
-find_package(gazebo_plugins REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(cv_bridge REQUIRED)
+# find_package(gazebo_plugins REQUIRED)
 find_package(generate_parameter_library REQUIRED)
+find_package(Open3D REQUIRED)
+find_package(message_filters REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
@@ -22,6 +27,7 @@ generate_parameter_library(teleop_twist_parameters
 
 add_executable(teleop src/teleop_twist_keyboard.cpp)
 add_executable(twist_mux src/teleop_twist_mux.cpp)
+# add_executable(open3d_mapping_node src/open3d_mapping_node.cpp)
 
 ament_target_dependencies(
   teleop 
@@ -36,11 +42,22 @@ ament_target_dependencies(
   geometry_msgs
 )
 
+# ament_target_dependencies(
+#   open3d_mapping_node
+#   rclcpp
+#   nav_msgs
+#   sensor_msgs
+#   cv_bridge
+#   message_filters
+# )
+
 target_link_libraries(teleop teleop_twist_parameters)
+# target_link_libraries(open3d_mapping_node Open3D::Open3D)
 
 install(TARGETS
   teleop
   twist_mux
+  # open3d_mapping_node
   DESTINATION lib/${PROJECT_NAME}
 )
 

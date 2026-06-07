@@ -15,7 +15,6 @@ def generate_launch_description():
 
     full_resource_path = models_path + ':' + pkg_share_path + ':' + pkg_path
 
-    # Set both variable names to be safe across different versions of Gazebo Sim/Ignition
 
     set_gz_resource_path = SetEnvironmentVariable(
         name='GZ_SIM_RESOURCE_PATH',
@@ -33,7 +32,6 @@ def generate_launch_description():
 
     world_file_path = os.path.join(pkg_path, 'worlds', 'no_roof_small_warehouse', 'no_roof_small_warehouse.world')
 
-    # 1. Gazebo Sim Launch - Pass gz_args as a single string to avoid parsing errors
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(get_package_share_directory('ros_gz_sim'), 'launch', 'gz_sim.launch.py')
@@ -41,13 +39,12 @@ def generate_launch_description():
         launch_arguments={'gz_args': f"-r {world_file_path}"}.items()
     )
 
-    # 2. Robot State Publisher
     rsp = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(pkg_path, 'launch', 'rsp.launch.py')),
         launch_arguments={'use_sim_time': use_sim_time}.items()
     )
 
-    # 3. Spawn Robot (Higher Z to avoid floor clipping)
+
     spawn_robot = Node(
         package='ros_gz_sim',
         executable='create',
@@ -65,16 +62,22 @@ def generate_launch_description():
         executable='parameter_bridge',
         arguments=[
             '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
-            # base Cam
-            '/base_cam/image@sensor_msgs/msg/Image[gz.msgs.Image',
-            '/base_cam/depth_image@sensor_msgs/msg/Image[gz.msgs.Image',
-            '/base_cam/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked',
-            '/base_cam/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo',
-            # Wrist Cam
-            '/wrist_cam/image@sensor_msgs/msg/Image[gz.msgs.Image',
-            '/wrist_cam/depth_image@sensor_msgs/msg/Image[gz.msgs.Image',
-            '/wrist_cam/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked',
-            '/wrist_cam/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo'
+            # # base Cam
+            # '/base_cam/image@sensor_msgs/msg/Image[gz.msgs.Image',
+            # '/base_cam/depth_image@sensor_msgs/msg/Image[gz.msgs.Image',
+            # '/base_cam/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked',
+            # '/base_cam/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo',
+            # # Wrist Cam
+            # '/wrist_cam/image@sensor_msgs/msg/Image[gz.msgs.Image',
+            # '/wrist_cam/depth_image@sensor_msgs/msg/Image[gz.msgs.Image',
+            # '/wrist_cam/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked',
+            # '/wrist_cam/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo',
+            
+            # 2D LiDAR Scan
+            '/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan',
+
+            # # IMU sensor
+            # '/imu@sensor_msgs/msg/Imu[gz.msgs.IMU'
         ],
         output='screen'
     )
@@ -97,7 +100,7 @@ def generate_launch_description():
     )
 
     arm_controller_spawner = TimerAction(
-        period=9.0, 
+        period=9.0,
         actions=[
             Node(
                 package="controller_manager",
@@ -107,6 +110,25 @@ def generate_launch_description():
             )
         ]
     )
+
+    imu_broadcaster_spawner = TimerAction(
+        period=11.0,
+        actions=[
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                arguments=["imu_sensor_broadcaster"],
+                output='screen'
+            )
+        ]
+    )
+
+    # open3d = Node(
+    #     package='mobile_robot',
+    #     executable='open3d_mapping_node',
+    #     name='open3d_mapper',
+    #     output='screen'
+    # )
 
     return LaunchDescription([
         declare_use_sim_time,
@@ -119,4 +141,6 @@ def generate_launch_description():
         joint_state_broadcaster,
         omni_drive,
         arm_controller_spawner,
+        imu_broadcaster_spawner,
+        # open3d
     ])
