@@ -123,6 +123,17 @@ def generate_launch_description():
         ]
     )
 
+    # ekf_node = Node(
+    #     package='robot_localization',
+    #     executable='ekf_node',
+    #     name='ekf_filter_node',
+    #     output='screen',
+    #     parameters=[
+    #         os.path.join(pkg_path, 'config', 'ekf.yaml'),
+    #         {'use_sim_time': use_sim_time}
+    #     ]
+    # )
+
     # open3d = Node(
     #     package='mobile_robot',
     #     executable='open3d_mapping_node',
