@@ -1,44 +1,48 @@
-#include "robot_estimator/robot_ekf.hpp"
-#include <cmath>
+#include <chrono>
+#include <functional>
+#include <memory>
+#include <string>
 
-RobotEKF::RobotEKF(double dt) : dt_(dt), theta_(0.0) {
-    
-    // initial the uncertainty or the variance
-    P_ = 0.1;
+#include "rclcpp/rclcpp.hpp"
+#include ""
+#include "nav_msgs/msg/odometry.hpp" // odom val
+#include "sensor_msgs/msg/imu.hpp"   // IMU val
 
-    // Process noise: from the encoder
-    Q_ = 0.02;
+using namespace std::chrono_literals;
 
-    // Measurement noise: from the IMU (only gyroscope)
-    R_ = 0.005;
-}
+class Robot_EKF : public rclcpp::Node
+{
+  public:
+    Robot_EKF()
+    : Node("Robot_EKF")
+    {
+      Odom_subscriber_ = this->create_subscription<nav_msgs::msg::Odometry>("odom", 10, std::bind(&Robot_EKF::Odom_callback, this, _1));
+      IMU_subscriber_ = this->create_subscription<sensor_msgs::msg::Imu>("imu_sensor_broadcaster/imu", 10);
+      
+      EKF_publisher_ = this->create_publisher<nav_msgs::msg::Odometry>("odom_EKF", 10);
+    }
 
-double RobotEKF::predict(double omega_enc) {
-    theta_ += omega_enc * dt_;
-    normalizeAngle();
+  private:
+    void Odom_callback(const nav_msgs::msg::Odometry::SharedPtr msg) const
+    {
 
-    // we normally have f but as a jacobian d_theta/d_theta which equal to 1
-    double F_ = 1;
-    P_ = F_*P_*F_ + Q_;
+    }
+    rclcpp::TimerBase::SharedPtr timer_;
 
-    return theta_;
-}
+    // Input sensor
+    rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr IMU_subscriber_;
+    rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr Odom_subscriber_; 
 
-double RobotEKF::update(double omega_gyro, double omega_enc) {
-    double y = omega_gyro - omega_enc;
+    // State estimator output
+    rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr EKF_publisher_;
 
-    double S = P_ + R_;
+    // 
+};
 
-    double K = P_ / S;
-
-    theta_ += K * y * dt_;
-    normalizeAngle();
-
-    P_ = (1.0 - K) * P_;
-
-    return theta_;
-}
-
-void RobotEKF::normalizeAngle() {
-    theta_ = std::atan2(std::sin(theta_), std::cos(theta_));
+int main(int argc, char * argv[])
+{
+  rclcpp::init(argc, argv);
+  rclcpp::spin(std::make_shared<MinimalPublisher>());
+  rclcpp::shutdown();
+  return 0;
 }
