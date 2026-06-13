@@ -76,6 +76,9 @@ def generate_launch_description():
             # 2D LiDAR Scan
             '/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan',
 
+            # Ground truth pose from Gazebo physics engine
+            '/world/default/dynamic_pose/info@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V',
+
             # # IMU sensor
             # '/imu@sensor_msgs/msg/Imu[gz.msgs.IMU'
         ],
@@ -123,6 +126,19 @@ def generate_launch_description():
         ]
     )
 
+    twist_mux = Node(
+        package='mobile_robot',
+        executable='twist_mux',
+        output='screen'
+    )
+
+
+    ground_truth_publisher = Node(
+        package='Kalman_Filter',
+        executable='ground_truth_publisher',
+        output='screen'
+    )
+
     # ekf_node = Node(
     #     package='robot_localization',
     #     executable='ekf_node',
@@ -153,5 +169,7 @@ def generate_launch_description():
         omni_drive,
         arm_controller_spawner,
         imu_broadcaster_spawner,
+        twist_mux,
+        ground_truth_publisher,
         # open3d
     ])

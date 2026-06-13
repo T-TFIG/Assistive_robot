@@ -1,0 +1,8 @@
+robot_estimators:
+  robot_dimensions:
+    wheel_radius: { type: double, default_value: 0.05, description: "รัศมีล้อหุ่นยนต์ (เมตร)" }
+    robot_length: { type: double, default_value: 0.2, description: "ระยะทางห่างจากจุดศูนย์กลางถึงล้อตามแนวแกน X" }
+    robot_width: { type: double, default_value: 0.2, description: "ระยะทางห่างจากจุดศูนย์กลางถึงล้อตามแนวแกน Y" }
+  ekf_tuning:
+    process_noise_theta: { type: double, default_value: 0.005, description: "ค่าคอยน์แวเรียนซ์ของโมเดล (Q)" }
+    measurement_noise_gyro: { type: double, default_value: 0.0001, description: "ค่าความแปรปรวนสัญญาณรบกวนของ IMU Gyro (R1)" }
