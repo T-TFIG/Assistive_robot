@@ -1,0 +1,19 @@
+<library path="pure_encoder">
+  <class name="robot_estimators/PureEncoder" 
+         type="robot_estimators::PureEncoder" 
+         base_class_type="controller_interface::ControllerInterface">
+    <description>
+      (Dead Reckoning Baseline)
+    </description>
+  </class>
+</library>
+
+<library path="ekf_estimator">
+  <class name="robot_estimators/EkfEstimator" 
+         type="robot_estimators::EkfEstimator" 
+         base_class_type="controller_interface::ControllerInterface">
+    <description>
+      Extended Kalman Filter Encoder with IMU
+    </description>
+  </class>
+</library>

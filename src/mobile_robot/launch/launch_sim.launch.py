@@ -1,6 +1,6 @@
 import os
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, SetEnvironmentVariable, TimerAction
+from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, SetEnvironmentVariable, TimerAction, ExecuteProcess
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
@@ -29,7 +29,6 @@ def generate_launch_description():
 
     use_sim_time = LaunchConfiguration('use_sim_time')
     declare_use_sim_time = DeclareLaunchArgument('use_sim_time', default_value='true')
-
     world_file_path = os.path.join(pkg_path, 'worlds', 'no_roof_small_warehouse', 'no_roof_small_warehouse.world')
 
     gazebo = IncludeLaunchDescription(
@@ -134,9 +133,52 @@ def generate_launch_description():
 
 
     ground_truth_publisher = Node(
-        package='Kalman_Filter',
+        package='robot_estimators',
         executable='ground_truth_publisher',
         output='screen'
+    )
+
+    # ESTIMATOR ZONE — both active simultaneously for validation
+    pure_encoder_spawner = TimerAction(
+        period=13.0,
+        actions=[Node(
+            package='controller_manager',
+            executable='spawner',
+            arguments=['pure_encoder_estimator'],
+            output='screen'
+        )]
+    )
+
+    ekf_spawner = TimerAction(
+        period=15.0,
+        actions=[Node(
+            package='controller_manager',
+            executable='spawner',
+            arguments=['ekf_estimator'],
+            output='screen'
+        )]
+    )
+
+
+    # Teleop in a new terminal window
+    # Sources both ROS and the local workspace so the package is found
+    install_dir = os.path.normpath(os.path.join(pkg_path, '..', '..'))
+    workspace_setup = os.path.join(install_dir, 'setup.bash')
+
+    teleop = TimerAction(
+        period=8.0,
+        actions=[ExecuteProcess(
+            cmd=[
+                'gnome-terminal', '--title', 'Teleop Keyboard', '--',
+                'bash', '-c',
+                f'source /opt/ros/humble/setup.bash && '
+                f'source {workspace_setup} && '
+                f'ros2 run mobile_robot teleop '
+                f'--ros-args --remap cmd_vel:=/cmd_vel; '
+                f'exec bash'
+            ],
+            output='screen'
+        )]
     )
 
     # ekf_node = Node(
@@ -171,5 +213,8 @@ def generate_launch_description():
         imu_broadcaster_spawner,
         twist_mux,
         ground_truth_publisher,
+        pure_encoder_spawner,
+        ekf_spawner,
+        teleop,
         # open3d
     ])

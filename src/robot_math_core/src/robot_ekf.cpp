@@ -1,13 +1,16 @@
-#include "Kalman_Filter/robot_ekf.hpp"
+#include "robot_math_core/robot_ekf.hpp"
 #include <cmath>
 #include <iostream>
 
-RobotEKF::RobotEKF() : theta_(0.0), P_(0.01) {
-    Q_ = 0.005;   
-    R_ = 0.0001;  
+namespace robot_math_core
+{
+
+EkfFilter::EkfFilter() : theta_(0.0), P_(0.01) {
+    Q_ = 0.005;
+    R_ = 0.0001;
 }
 
-double RobotEKF::predict(double omega_enc, double dt) {
+double EkfFilter::predict(double omega_enc, double dt) {
     theta_ += omega_enc * dt; 
     
     P_ += Q_ * dt; 
@@ -17,7 +20,7 @@ double RobotEKF::predict(double omega_enc, double dt) {
     return theta_;
 }
 
-double RobotEKF::update(double omega_gyro, double omega_enc, double dt) {
+double EkfFilter::update(double omega_gyro, double omega_enc, double dt) {
 
     double delta_theta_gyro = omega_gyro * dt;
     double delta_theta_enc  = omega_enc * dt;
@@ -37,14 +40,16 @@ double RobotEKF::update(double omega_gyro, double omega_enc, double dt) {
     return theta_;
 }
 
-void RobotEKF::setNoiseParameters(double q_theta, double r_gyro)
+void EkfFilter::setNoiseParameters(double q_theta, double r_gyro)
 {
     Q_ = q_theta;
     R_ = r_gyro;
 }
 
-void RobotEKF::resetState(double initial_theta, double initial_P)
+void EkfFilter::resetState(double initial_theta, double initial_P)
 {
     theta_ = initial_theta;
     P_ = initial_P;
 }
+
+}  // namespace robot_math_core

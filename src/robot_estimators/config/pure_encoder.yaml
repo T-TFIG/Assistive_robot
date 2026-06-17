@@ -1,0 +1,8 @@
+pure_encoder:
+  robot_dimensions:
+    wheel_radius: {type: double, default_value: 0.02525}
+    robot_length: {type: double, default_value: 0.217}
+    robot_width: {type: double, default_value: 0.211}
+  odom_topic:    {type: string, default_value: "/odom"}
+  odom_frame_id: {type: string, default_value: "odom"}
+  base_frame_id: {type: string, default_value: "base_footprint"}

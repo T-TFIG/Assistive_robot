@@ -8,9 +8,10 @@ PidController::PidController() : controller_interface::ControllerInterface() {}
 controller_interface::CallbackReturn PidController::on_init()
 {
     auto result = get_node()->set_parameter(rclcpp::Parameter("use_sim_time", true));
+    (void)result;
 
     try {
-        param_listener_ = std::make_shared<pid_controller::ParamListener>(get_node()); 
+        param_listener_ = std::make_shared<pid_controller::ParamListener>(get_node());
         params_ = param_listener_->get_params();
 
         RCLCPP_INFO(get_node()->get_logger(), "Number of joints: %zu", params_.dof_names.size());
@@ -38,18 +39,15 @@ controller_interface::CallbackReturn PidController::on_configure(const rclcpp_li
     rt_command_sub_ = get_node()->create_subscription<geometry_msgs::msg::Twist>(
         "~/cmd_vel", rclcpp::SystemDefaultsQoS(), callback);
 
-    odom_pub_ = get_node()->create_publisher<nav_msgs::msg::Odometry>("/odom", rclcpp::SystemDefaultsQoS());
-
-    tf_boardcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(*get_node());
-
-    pseudo_odom_.resize(5, 0.0);
-
     return CallbackReturn::SUCCESS;
 }
 
 controller_interface::CallbackReturn PidController::on_activate(const rclcpp_lifecycle::State &)
 {
-    std::fill(pseudo_odom_.begin(), pseudo_odom_.end(), 0.0);
+    for (auto & pid : pids_) {
+        pid.integral = 0.0;
+        pid.prev_error = 0.0;
+    }
     return CallbackReturn::SUCCESS;
 }
 
@@ -89,8 +87,6 @@ Eigen::Matrix<double, 4, 1> PidController::inverse_kinematic(const geometry_msgs
     const double L = params_.robot_length;
     const double W = params_.robot_width;
 
-    double k = L + W;
-
     Eigen::Matrix<double, 4, 3> M;
     M <<  -(L+W), 1, -1,
            (L+W), 1,  1,
@@ -98,38 +94,11 @@ Eigen::Matrix<double, 4, 1> PidController::inverse_kinematic(const geometry_msgs
           -(L+W), 1,  1;
 
     Eigen::Matrix<double, 3, 1> v;
-
     v << cmd.angular.z,
          cmd.linear.x,
          cmd.linear.y;
 
     return (1.0 / r) * M * v;
-}
-
-Eigen::Matrix<double, 3, 1> PidController::forward_kinematic()
-{
-    const double r = params_.wheel_radius;
-    const double L = params_.robot_length;
-    const double W = params_.robot_width;
-
-    double k = L + W;
-
-    Eigen::Matrix<double, 4, 3> M;
-    M <<  -(L+W), 1, -1,
-           (L+W), 1,  1,
-           (L+W), 1, -1,
-          -(L+W), 1,  1;
-
-    Eigen::Matrix<double, 3, 4> M_pinv =
-        (M.transpose() * M).inverse() * M.transpose();
-
-    Eigen::Matrix<double, 4, 1> omega;
-    omega << state_interfaces_[0].get_value(),
-             state_interfaces_[1].get_value(),
-             state_interfaces_[2].get_value(),
-             state_interfaces_[3].get_value();
-
-    return r * M_pinv * omega;
 }
 
 double PidController::compute_pid_command(double& error, double& dt, int i)
@@ -151,85 +120,33 @@ double PidController::compute_pid_command(double& error, double& dt, int i)
 }
 
 controller_interface::return_type PidController::update(
-    const rclcpp::Time & time,
+    const rclcpp::Time & /*time*/,
     const rclcpp::Duration & period)
 {
     auto command = rt_command_ptr_.readFromRT();
 
     geometry_msgs::msg::Twist cmd_vel;
-
     if (command && *command)
         cmd_vel = **command;
 
-    Eigen::Matrix<double, 4, 1> desired = inverse_kinematic(cmd_vel);
-
     double dt = period.seconds();
     if (dt <= 0.0) return controller_interface::return_type::OK;
+
+    Eigen::Matrix<double, 4, 1> desired = inverse_kinematic(cmd_vel);
+
     for (int i = 0; i < 4; i++)
     {
         double current = state_interfaces_[i].get_value();
         double error = desired(i) - current;
-        
 
         double effort = compute_pid_command(error, dt, i);
 
-        // safety clamp
         if (effort > 10.0) effort = 10.0;
         if (effort < -10.0) effort = -10.0;
         if (std::isnan(effort)) effort = 0.0;
 
         command_interfaces_[i].set_value(effort);
     }
-
-    // odometry
-    auto vel = forward_kinematic();
-
-    double theta_old = pseudo_odom_[2];
-    double delta_theta = vel(0) * dt;
-    double theta_mid = theta_old + (delta_theta / 2.0); 
-
-    pseudo_odom_[0] += (vel(1) * cos(theta_mid) - vel(2) * sin(theta_mid)) * dt;
-    pseudo_odom_[1] += (vel(1) * sin(theta_mid) + vel(2) * cos(theta_mid)) * dt;
-    pseudo_odom_[2] += delta_theta;
-
-    auto odom_msg = std::make_unique<nav_msgs::msg::Odometry>();
-    odom_msg->header.stamp = time;
-    odom_msg->header.frame_id = "odom";
-    odom_msg->child_frame_id = "base_footprint";
-
-    odom_msg->pose.pose.position.x = pseudo_odom_[0];
-    odom_msg->pose.pose.position.y = pseudo_odom_[1];
-    odom_msg->pose.pose.position.z = 0.0;
-
-    tf2::Quaternion q;
-    q.setRPY(0, 0, pseudo_odom_[2]);
-    odom_msg->pose.pose.orientation.x = q.x();
-    odom_msg->pose.pose.orientation.y = q.y();
-    odom_msg->pose.pose.orientation.z = q.z();
-    odom_msg->pose.pose.orientation.w = q.w();
-
-    odom_msg->twist.twist.linear.x = vel(1);
-    odom_msg->twist.twist.linear.y = vel(2);
-    odom_msg->twist.twist.angular.z = vel(0);
-
-    odom_pub_->publish(std::move(odom_msg));
-
-    geometry_msgs::msg::TransformStamped t;
-
-    t.header.stamp = time;
-    t.header.frame_id = "odom";
-    t.child_frame_id = "base_footprint";
-
-    t.transform.translation.x = pseudo_odom_[0];
-    t.transform.translation.y = pseudo_odom_[1];
-    t.transform.translation.z = 0.0;
-
-    t.transform.rotation.x = q.x();
-    t.transform.rotation.y = q.y();
-    t.transform.rotation.z = q.z();
-    t.transform.rotation.w = q.w();
-
-    tf_boardcaster_->sendTransform(t);
 
     return controller_interface::return_type::OK;
 }

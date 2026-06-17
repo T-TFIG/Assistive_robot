@@ -1,5 +1,5 @@
-#ifndef ROBOT_ESTIMATORS__EKF_ESTIMATOR_HPP_
-#define ROBOT_ESTIMATORS__EKF_ESTIMATOR_HPP_
+#ifndef ROBOT_ESTIMATORS__PURE_ENCODER_HPP_
+#define ROBOT_ESTIMATORS__PURE_ENCODER_HPP_
 
 #include <memory>
 #include <vector>
@@ -13,20 +13,20 @@
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 #include "tf2_ros/transform_broadcaster.h"
 #include "realtime_tools/realtime_publisher.hpp"
-
-#include "robot_math_core/robot_ekf.hpp"
-#include <robot_estimators/ekf_estimator_yaml.hpp>
+#include <robot_estimators/pure_encoder_yaml.hpp>
 
 namespace robot_estimators
 {
-    class EkfEstimator : public controller_interface::ControllerInterface
+
+    class PureEncoder : public controller_interface::ControllerInterface
     {
         public:
-            EkfEstimator();
+            PureEncoder();
 
             controller_interface::CallbackReturn on_init() override;
             controller_interface::InterfaceConfiguration command_interface_configuration() const override;
             controller_interface::InterfaceConfiguration state_interface_configuration() const override;
+
             controller_interface::CallbackReturn on_configure(const rclcpp_lifecycle::State & previous_state) override;
             controller_interface::CallbackReturn on_activate(const rclcpp_lifecycle::State & previous_state) override;
 
@@ -34,20 +34,19 @@ namespace robot_estimators
                 const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
         private:
-            std::shared_ptr<ekf_estimator::ParamListener> param_listener_;
-            ekf_estimator::Params params_;
-
-            std::unique_ptr<robot_math_core::EkfFilter> filter_core_;
-
             Eigen::Matrix<double, 3, 1> forward_kinematic();
 
-            double fused_x_ = 0.0;
-            double fused_y_ = 0.0;
-            double fused_yaw_ = 0.0;
+            double odom_x_ = 0.0;
+            double odom_y_ = 0.0;
+            double odom_yaw_ = 0.0;
 
             std::shared_ptr<realtime_tools::RealtimePublisher<nav_msgs::msg::Odometry>> rt_odom_pub_;
             std::unique_ptr<tf2_ros::TransformBroadcaster> tf_boardcaster_;
-    };
-}
 
-#endif // ROBOT_ESTIMATORS__EKF_ESTIMATOR_HPP_
+            std::shared_ptr<pure_encoder::ParamListener> param_listener_;
+            pure_encoder::Params params_;
+    };
+
+} // namespace robot_estimators
+
+#endif // ROBOT_ESTIMATORS__PURE_ENCODER_HPP_

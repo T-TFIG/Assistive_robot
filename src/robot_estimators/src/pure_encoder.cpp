@@ -1,32 +1,25 @@
-#include "robot_estimators/ekf_estimator.hpp"
+#include "robot_estimators/pure_encoder.hpp"
 #include "pluginlib/class_list_macros.hpp"
 #include <cmath>
 
 namespace robot_estimators
 {
 
-EkfEstimator::EkfEstimator() : controller_interface::ControllerInterface() {}
+PureEncoder::PureEncoder() : controller_interface::ControllerInterface() {}
 
-controller_interface::CallbackReturn EkfEstimator::on_init()
+controller_interface::CallbackReturn PureEncoder::on_init()
 {
-  filter_core_ = std::make_unique<robot_math_core::EkfFilter>();
   return controller_interface::CallbackReturn::SUCCESS;
 }
 
-controller_interface::CallbackReturn EkfEstimator::on_configure(const rclcpp_lifecycle::State & /*previous_state*/)
+controller_interface::CallbackReturn PureEncoder::on_configure(const rclcpp_lifecycle::State & /*previous_state*/)
 {
-    RCLCPP_INFO(get_node()->get_logger(), "downloading the parameter of the EKF from yaml ...");
+    RCLCPP_INFO(get_node()->get_logger(), "downloading the parameter of the pure encoder from yaml ...");
 
     try
     {
-        param_listener_ = std::make_unique<ekf_estimator::ParamListener>(get_node());
+        param_listener_ = std::make_shared<pure_encoder::ParamListener>(get_node());
         params_ = param_listener_->get_params();
-
-        filter_core_->setNoiseParameters(
-            params_.ekf_tuning.process_noise_theta,
-            params_.ekf_tuning.measurement_noise_gyro
-        );
-
         RCLCPP_INFO(get_node()->get_logger(), "download finished");
     }
     catch(const std::exception& e)
@@ -50,12 +43,12 @@ controller_interface::CallbackReturn EkfEstimator::on_configure(const rclcpp_lif
     return controller_interface::CallbackReturn::SUCCESS;
 }
 
-controller_interface::InterfaceConfiguration EkfEstimator::command_interface_configuration() const
+controller_interface::InterfaceConfiguration PureEncoder::command_interface_configuration() const
 {
   return controller_interface::InterfaceConfiguration{controller_interface::interface_configuration_type::NONE};
 }
 
-controller_interface::InterfaceConfiguration EkfEstimator::state_interface_configuration() const
+controller_interface::InterfaceConfiguration PureEncoder::state_interface_configuration() const
 {
   controller_interface::InterfaceConfiguration config;
   config.type = controller_interface::interface_configuration_type::INDIVIDUAL;
@@ -64,20 +57,21 @@ controller_interface::InterfaceConfiguration EkfEstimator::state_interface_confi
         "mobile_base_Revolute_1/velocity",
         "mobile_base_Revolute_2/velocity",
         "mobile_base_Revolute_3/velocity",
-        "mobile_base_Revolute_4/velocity",
-        "imu_sensor/angular_velocity.z"
+        "mobile_base_Revolute_4/velocity"
   };
 
   return config;
 }
 
-controller_interface::CallbackReturn EkfEstimator::on_activate(const rclcpp_lifecycle::State & /*previous_state*/)
+controller_interface::CallbackReturn PureEncoder::on_activate(const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  filter_core_->resetState(0.0, 0.01);
+  odom_x_ = 0.0;
+  odom_y_ = 0.0;
+  odom_yaw_ = 0.0;
   return controller_interface::CallbackReturn::SUCCESS;
 }
 
-Eigen::Matrix<double, 3, 1> EkfEstimator::forward_kinematic()
+Eigen::Matrix<double, 3, 1> PureEncoder::forward_kinematic()
 {
     const double r = params_.robot_dimensions.wheel_radius;
     const double L = params_.robot_dimensions.robot_length;
@@ -101,24 +95,20 @@ Eigen::Matrix<double, 3, 1> EkfEstimator::forward_kinematic()
     return r * M_pinv * omega;
 }
 
-controller_interface::return_type EkfEstimator::update(
+controller_interface::return_type PureEncoder::update(
   const rclcpp::Time & time, const rclcpp::Duration & period)
 {
   double dt = period.seconds();
   if (dt <= 0.0) return controller_interface::return_type::OK;
 
-  double wz_gyro = state_interfaces_[4].get_value();
-
   Eigen::Matrix<double, 3, 1> fk = forward_kinematic();
-  double wz_enc = fk(0);
-  double vel_x  = fk(1);
-  double vel_y  = fk(2);
+  double wz_enc  = fk(0);
+  double vel_x   = fk(1);
+  double vel_y   = fk(2);
 
-  filter_core_->predict(wz_enc, dt);
-  fused_yaw_ = filter_core_->update(wz_gyro, wz_enc, dt);
-
-  fused_x_ += (vel_x * std::cos(fused_yaw_) - vel_y * std::sin(fused_yaw_)) * dt;
-  fused_y_ += (vel_x * std::sin(fused_yaw_) + vel_y * std::cos(fused_yaw_)) * dt;
+  odom_yaw_ += wz_enc * dt;
+  odom_x_ += (vel_x * std::cos(odom_yaw_) - vel_y * std::sin(odom_yaw_)) * dt;
+  odom_y_ += (vel_x * std::sin(odom_yaw_) + vel_y * std::cos(odom_yaw_)) * dt;
 
   if (rt_odom_pub_ && rt_odom_pub_->trylock())
   {
@@ -127,12 +117,12 @@ controller_interface::return_type EkfEstimator::update(
     msg.header.frame_id = params_.odom_frame_id;
     msg.child_frame_id = params_.base_frame_id;
 
-    msg.pose.pose.position.x = fused_x_;
-    msg.pose.pose.position.y = fused_y_;
+    msg.pose.pose.position.x = odom_x_;
+    msg.pose.pose.position.y = odom_y_;
     msg.pose.pose.position.z = 0.0;
 
     tf2::Quaternion q;
-    q.setRPY(0, 0, fused_yaw_);
+    q.setRPY(0, 0, odom_yaw_);
     msg.pose.pose.orientation.x = q.x();
     msg.pose.pose.orientation.y = q.y();
     msg.pose.pose.orientation.z = q.z();
@@ -140,14 +130,14 @@ controller_interface::return_type EkfEstimator::update(
 
     msg.twist.twist.linear.x = vel_x;
     msg.twist.twist.linear.y = vel_y;
-    msg.twist.twist.angular.z = wz_gyro;
+    msg.twist.twist.angular.z = wz_enc;
 
     geometry_msgs::msg::TransformStamped t;
     t.header.stamp = time;
     t.header.frame_id = params_.odom_frame_id;
     t.child_frame_id = params_.base_frame_id;
-    t.transform.translation.x = fused_x_;
-    t.transform.translation.y = fused_y_;
+    t.transform.translation.x = odom_x_;
+    t.transform.translation.y = odom_y_;
     t.transform.translation.z = 0.0;
     t.transform.rotation.x = q.x();
     t.transform.rotation.y = q.y();
@@ -163,4 +153,4 @@ controller_interface::return_type EkfEstimator::update(
 
 } // namespace robot_estimators
 
-PLUGINLIB_EXPORT_CLASS(robot_estimators::EkfEstimator, controller_interface::ControllerInterface)
+PLUGINLIB_EXPORT_CLASS(robot_estimators::PureEncoder, controller_interface::ControllerInterface)
