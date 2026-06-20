@@ -1,11 +1,11 @@
-#ifndef CARTOGRAPHER__SUBMAP_MANAGER_HPP_
-#define CARTOGRAPHER__SUBMAP_MANAGER_HPP_
+#ifndef CARTOGRAPHER_REINVENTED__SUBMAP_MANAGER_HPP_
+#define CARTOGRAPHER_REINVENTED__SUBMAP_MANAGER_HPP_
 
-#include "cartographer/submap.hpp"
+#include "cartographer_reinvented/submap.hpp"
 #include <nav_msgs/msg/occupancy_grid.hpp>
 #include <rclcpp/rclcpp.hpp>
 
-namespace cartographer
+namespace cartographer_reinvented
 {
 
 class SubmapManager
@@ -36,6 +36,6 @@ private:
     void create_new_submap(float origin_x, float origin_y);
 };
 
-}  // namespace cartographer
+}  // namespace cartographer_reinvented
 
-#endif  // CARTOGRAPHER__SUBMAP_MANAGER_HPP_
+#endif  // CARTOGRAPHER_REINVENTED__SUBMAP_MANAGER_HPP_

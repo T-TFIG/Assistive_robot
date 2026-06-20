@@ -1,9 +1,10 @@
-#ifndef CARTOGRAPHER__SUBMAP_HPP_
-#define CARTOGRAPHER__SUBMAP_HPP_
+#ifndef CARTOGRAPHER_REINVENTED__SUBMAP_HPP_
+#define CARTOGRAPHER_REINVENTED__SUBMAP_HPP_
 
-#include "cartographer/occupancy_grid.hpp"
+#include "cartographer_reinvented/occupancy_grid.hpp"
 
-namespace cartographer
+
+namespace cartographer_reinvented
 {
 
 class Submap
@@ -32,6 +33,6 @@ private:
     bool frozen_;
 };
 
-}  // namespace cartographer
+}  // namespace cartographer_reinvented
 
-#endif  // CARTOGRAPHER__SUBMAP_HPP_
+#endif  // CARTOGRAPHER_REINVENTED__SUBMAP_HPP_

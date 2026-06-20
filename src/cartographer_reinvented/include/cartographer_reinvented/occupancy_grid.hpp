@@ -1,16 +1,16 @@
-#ifndef CARTOGRAPHER__OCCUPANCY_GRID_HPP_
-#define CARTOGRAPHER__OCCUPANCY_GRID_HPP_
+#ifndef CARTOGRAPHER_REINVENTED__OCCUPANCY_GRID_HPP_
+#define CARTOGRAPHER_REINVENTED__OCCUPANCY_GRID_HPP_
 
 #include <vector>
 #include <cmath>
-#include <Eigen/Dense>
+#include <eigen3/Eigen/Dense>
 #include <numbers>
 #include <sensor_msgs/msg/laser_scan.hpp>
 #include <nav_msgs/msg/occupancy_grid.hpp>
 #include <rclcpp/rclcpp.hpp>
 
 
-namespace cartographer
+namespace cartographer_reinvented
 {
 
 class OccupancyGrid
@@ -80,6 +80,6 @@ private:
 
 };
 
-}  // namespace cartographer
+}  // namespace cartographer_reinvented
 
-#endif  // CARTOGRAPHER__OCCUPANCY_GRID_HPP_
+#endif  // CARTOGRAPHER_REINVENTED__OCCUPANCY_GRID_HPP_

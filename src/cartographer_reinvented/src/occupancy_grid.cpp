@@ -1,6 +1,6 @@
-#include "cartographer/occupancy_grid.hpp"
+#include "cartographer_reinvented/occupancy_grid.hpp"
 
-namespace cartographer
+namespace cartographer_reinvented
 {
     OccupancyGrid::OccupancyGrid(int width, int height, float resolution, float origin_x, float origin_y): 
     width_(width), height_(height), resolution_(resolution), origin_x_(origin_x), origin_y_(origin_y) {}
