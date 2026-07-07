@@ -16,6 +16,10 @@
   <depend>generate_parameter_library</depend>
   <depend>geometry_msgs</depend>
   <depend>ros2_control</depend>
+  <depend>control_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>tf2</depend>
+  <depend>tf2_geometry_msgs</depend>
 
   <export>
     <controller_interface plugin="${prefix}/plugin.xml" />

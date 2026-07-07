@@ -20,13 +20,11 @@ RUN apt-get update && apt-get install -y \
     ros-humble-turtlebot3 \
     ros-humble-turtlebot3-simulations \
     ros-humble-turtlebot3-gazebo \
-    ros-humble-nav2-rviz-plugins \
+    ros-humble-slam-toolbox \
     ros-humble-rviz2 \
     ros-humble-rviz-common \
     ros-humble-rviz-default-plugins \
-    && rm -rf /var/lib/apt/list/*
-
-RUN apt-get install nano
+    nano
 
 
 # make our workspace
@@ -37,10 +35,12 @@ COPY ./src ./src
 SHELL ["/bin/bash", "-c"]
 
 # install from our package.xml
-RUN rosdep update && \
-    rosdep install --from-paths src --ignore-src -y
+RUN apt-get update && \
+    rosdep update && \
+    rosdep install --from-paths src --ignore-src -y && \
+    rm -rf /var/lib/apt/lists/*
 
-# source 
+# source
 RUN . /opt/ros/${ROS_DISTRO}/setup.bash && \
     colcon build --merge-install
 

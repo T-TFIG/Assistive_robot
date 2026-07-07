@@ -9,12 +9,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
-find_package(generate_parameter_library REQUIRED)
-
-
-generate_parameter_library(laser_ICP_parameters
-  config/my_controller.yaml
-)
+find_package(Eigen3 REQUIRED)
 
 add_executable(ICP_pose_est src/laser_ICP.cpp)
 
@@ -22,20 +17,13 @@ ament_target_dependencies(
   ICP_pose_est
   rclcpp
   sensor_msgs
-  generate_parameter_library
 )
 
-target_link_libraries(ICP_pose_est laser_ICP_parameters)
+target_link_libraries(ICP_pose_est Eigen3::Eigen)
 
 install(TARGETS
   ICP_pose_est
   DESTINATION lib/${PROJECT_NAME}
-)
-
-install(
-  DIRECTORY
-    config
-  DESTINATION share/${PROJECT_NAME}
 )
 
 if(BUILD_TESTING)
